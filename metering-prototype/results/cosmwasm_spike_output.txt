@@ -1,0 +1,31 @@
+# CosmWasm-on-GroveDB spike: real cosmwasm_std::Storage over a GroveDB subtree,
+# driven through real cw-storage-plus, proven with GroveDB prove_query.
+
+## get / set / remove
+alice loaded as 100 (read-your-writes inside the transaction): OK
+carol removed and absent within the transaction: OK
+
+## ordered range (ascending), reflecting uncommitted transaction state
+  alice = 100
+  bob = 50
+  dave = 25
+
+## ordered range (descending)
+  dave = 25
+  bob = 50
+  alice = 100
+
+## bounded range [bob, dave)
+  bob = 50
+
+## provability
+  committed root hash: 35f1a1971d1a8a223cf2892a5c09c61e085504f4ab3bd1e689b31183c2549cef
+  proof verified against the live root: OK
+  proven contract entries: 3
+  alice's balance decoded from the proof: 100
+
+# Spike complete. Every open item from the assessment is now execution-produced:
+# get/set/remove and ordered range (both directions, with bounds) run through real
+# cw-storage-plus over GroveDB inside a transaction with read-your-writes, the result
+# is deterministic across runs, and the committed contract state is provable with
+# GroveDB prove_query, carrying real contract data that verifies against the root.

@@ -1,0 +1,37 @@
+# Phase D: certified scenarios under load, MEASURED Phase C vectors in the Phase B meter
+# drain budget R = 40730 propagation units/block (about 10 single-owner cleanups/block)
+
+## D1 flow ceiling (VERIFY 4): offered load above R, governed vs ungoverned backlog
+# offered=1.5x R over 200 blocks. Governed admission throttles to R; ungoverned grows.
+single_owner   offered= 50% of R   governed_max_backlog=0     ungoverned_max_backlog=0
+single_owner   offered= 90% of R   governed_max_backlog=0     ungoverned_max_backlog=0
+single_owner   offered=100% of R   governed_max_backlog=0     ungoverned_max_backlog=0
+single_owner   offered=150% of R   governed_max_backlog=0     ungoverned_max_backlog=1000
+
+## D2 drain throughput (VERIFY 1): terminalizations per block at R = 40730
+single_owner           W=4073   throughput= 10/block  ~1728000/day
+autonomous(fan=1)      W=4325   throughput=  9/block  ~1555200/day
+autonomous(fan=8)      W=8339   throughput=  4/block  ~691200/day
+autonomous(fan=64)     W=63576  throughput=  0/block  ~0/day
+irrevocable_request    W=4325   throughput=  9/block  ~1555200/day
+deferred_task          W=5224   throughput=  7/block  ~1209600/day
+hook_binding           W=5224   throughput=  7/block  ~1209600/day
+lease_exit             W=6375   throughput=  6/block  ~1036800/day
+
+## D3 partition point (VERIFY 6): split C_total across known_due : R : overdue
+# C_total held fixed; more R buys deadline-free throughput at the cost of dated capacity.
+# The overdue reserve is a fixed fraction of C_total, so the split is genuinely three-way.
+R= 20% of C_total  deadline_free=  5/block  dated_capacity= 14/block  overdue_reserve=  5/block
+R= 40% of C_total  deadline_free= 10/block  dated_capacity=  9/block  overdue_reserve=  5/block
+R= 60% of C_total  deadline_free= 15/block  dated_capacity=  4/block  overdue_reserve=  5/block
+R= 80% of C_total  deadline_free= 20/block  dated_capacity=  0/block  overdue_reserve=  5/block
+
+## D4 mass-retirement load test: drain a large backlog, invariants every block
+retired=1000    drained_in=100   blocks (predicted 100), invariants held every block
+retired=10000   drained_in=1000  blocks (predicted 1000), invariants held every block
+retired=100000  drained_in=10000 blocks (predicted 10000), invariants held every block
+
+# Phase D complete: the flow ceiling bounds the backlog (D1), R yields measured
+# per-class throughput (D2), the partition trades deadline-free against dated capacity
+# (D3), and a 100k-object mass retirement drains in the predicted blocks with all ten
+# invariants holding at every block boundary (D4).

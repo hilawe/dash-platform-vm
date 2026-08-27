@@ -1,0 +1,24 @@
+[package]
+name = "evm-guest-contract"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+# A minimal EVM interpreter packaged as a CosmWasm contract, for the "EVM as guest" spike. It runs
+# real EVM bytecode; its SSTORE/SLOAD go to the CosmWasm contract storage (deps.storage), which the
+# host backs with GroveDB. Compiles to wasm32-unknown-unknown and loads into cosmwasm-vm like any
+# contract. See ../cosmwasm-host/src/bin/evm.rs for the host that runs it over GroveDB.
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+cosmwasm-std = "1.5"
+serde = { version = "1", features = ["derive"] }
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+overflow-checks = true

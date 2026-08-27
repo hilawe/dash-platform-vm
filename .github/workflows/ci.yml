@@ -1,0 +1,50 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: 1
+
+jobs:
+  meter-core:
+    name: meter-core (terminal-work meter)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: metering-prototype/meter-core
+      - name: Test
+        run: cargo test --manifest-path metering-prototype/meter-core/Cargo.toml --locked
+      - name: Phase D scenario
+        run: cargo run --manifest-path metering-prototype/meter-core/Cargo.toml --locked --bin phase_d
+
+  cosmwasm-host:
+    name: cosmwasm-host (CosmWasm storage over GroveDB)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: metering-prototype/cosmwasm-host
+      # GroveDB pulls in RocksDB, which needs a C++ toolchain and clang to build.
+      - name: Build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang llvm libclang-dev build-essential
+      # The crate depends on GroveDB through a relative path to a sibling
+      # checkout. The revision is the one every measurement in this repository
+      # was taken against, so it is pinned by commit rather than by branch.
+      - name: Check out GroveDB at the pinned revision
+        run: |
+          git clone https://github.com/dashpay/grovedb.git "${{ github.workspace }}/../grovedb"
+          git -C "${{ github.workspace }}/../grovedb" checkout 9b98a35644cdea73cc1b21d7c122cb58ae9fafd8
+      - name: Test
+        run: cargo test --manifest-path metering-prototype/cosmwasm-host/Cargo.toml --locked

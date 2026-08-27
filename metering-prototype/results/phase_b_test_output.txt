@@ -1,0 +1,25 @@
+    Finished `release` profile [optimized] target(s) in 0.05s
+     Running unittests src/lib.rs (target/release/deps/meter_core-a49b0391058d5405)
+
+running 12 tests
+test tests::certified_scenario_equal_aggregate_different_lane_reclassification ... ok
+test tests::inv10_mass_retirement_single_disposition_and_breaks ... ok
+test tests::inv2_flow_holds_and_breaks ... ok
+test tests::inv1_accounting_holds_and_breaks ... ok
+test tests::certified_scenario_transfer_chain_stays_bounded ... ok
+test tests::inv3_partition_holds_and_breaks ... ok
+test tests::inv4_transfer_conservation_holds_and_breaks ... ok
+test tests::inv5_release_timing_holds_and_breaks ... ok
+test tests::inv6_refusal_leaves_state_unchanged_and_breaks ... ok
+test tests::inv7_dated_work_meets_deadline_and_breaks ... ok
+test tests::inv8_irrevocable_burst_gate_holds_and_breaks ... ok
+test tests::inv9_reclassification_charges_positive_only_and_breaks ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests meter_core
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

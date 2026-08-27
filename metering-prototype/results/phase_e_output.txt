@@ -1,0 +1,22 @@
+# Phase E: compute-dimension bound via a deterministic Wasm interpreter (wasmi, fuel)
+# Fuel is a deterministic executed-operation count, not wall-clock. It is the unit;
+# wall-clock is context only. Each size is run twice and required identical fuel.
+
+   iters            fuel     fuel/iter         wall_ns
+       0              21          0.00             666
+       1              37         37.00             416
+       8             149         18.62             583
+      64            1045         16.33            3126
+     256            4117         16.08            9334
+    1024           16405         16.02           33127
+    8192          131093         16.00          291518
+
+# Fuel is exactly affine: fuel(n) = 21 + 16 * n, verified at every measured size.
+# The compute unit is 16 fuel per integer settlement step, with a fixed per-call
+# overhead of 21 fuel. So a class's compute terminal-work component is (settlement
+# steps) times 16 fuel plus the fixed overhead.
+#
+# CLAIM WIDTH: this is the SAMPLED per-step cost of ONE representative integer kernel,
+# not a worst-case bound over arbitrary programs. A per-step worst-case bound needs the
+# full opcode cost model; what is established here is a deterministic, reproducible,
+# exactly-linear unit and its scaling law for this kernel.

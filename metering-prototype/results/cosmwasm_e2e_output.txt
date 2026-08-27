@@ -1,0 +1,13 @@
+# End-to-end: a compiled CosmWasm contract (hackatom) run through cosmwasm-vm (wasmer),
+# backed by the overlay storage over GroveDB, with the result proven by GroveDB.
+
+## the contract compiled and loaded into the VM (wasmer, singlepass)
+## instantiate ran through the VM and wrote contract state into the overlay
+## query read the stored verifier back through the VM: {"verifier":"verifies"}
+## the successful call's writes were committed to GroveDB (a failed call would roll back)
+## the contract's stored config is provable in GroveDB (1 entry binding the verifier)
+  committed root: f59892f53b3b5d304c286011b7b10612f39d9ad960b6df0c127cb9cf5915eb5f
+
+# End-to-end complete. A real compiled CosmWasm contract instantiated and queried
+# through cosmwasm-vm over the overlay-backed GroveDB store, its writes committed on
+# success, and the exact stored config proven with GroveDB prove_query.

@@ -1,0 +1,14 @@
+# Module bindings, step 2: the write path. A real contract emits a transfer, and a
+# validating stand-in router applies it to Dash-native token balances in GroveDB.
+
+## before: contract balance = 1000, beneficiary balance = 0
+## the contract emitted 1 message(s) from release
+  router applied: transfer 1000 udash from cosmos2contract to benefits
+## after: contract balance = 0, beneficiary balance = 1000
+## the resulting Dash token balances are provable and bound to exact values:
+  benefits = 1000 udash
+  cosmos2contract = 0 udash
+
+# Write path complete. A running contract read Dash-native state, emitted a transfer,
+# and the validating router moved the tokens in GroveDB (no minting, checked, atomic),
+# with the result provable and bound to the exact expected balances.

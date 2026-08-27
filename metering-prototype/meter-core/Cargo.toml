@@ -1,0 +1,21 @@
+[package]
+name = "meter-core"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+# Phase B of the metering prototype: the D3b terminal-work meter arithmetic modelled in memory,
+# with no store dependency. Pure deterministic bookkeeping, so it needs no GroveDB, no consensus,
+# and no networking. The invariant suite (docs/METERING_PROTOTYPE_SPEC.md, section 6) is checked
+# after every block, and each invariant is watched FAILING against a deliberately broken variant
+# (the Fault enum) before it passes, per the mutation-check discipline.
+
+[dependencies]
+
+[[bin]]
+name = "phase_d"
+path = "src/bin/phase_d.rs"
+
+[lib]
+name = "meter_core"
+path = "src/lib.rs"

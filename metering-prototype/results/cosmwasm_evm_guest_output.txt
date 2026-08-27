@@ -1,0 +1,17 @@
+# EVM as a guest over GroveDB. A minimal EVM interpreter, compiled as a CosmWasm
+# contract, runs EVM bytecode whose SSTORE lands in GroveDB, then it is proven.
+
+## the embedded EVM-guest wasm matches the committed source hash 2b7eab7a08785e62
+## the EVM-guest contract compiled and loaded into the VM (wasmer, singlepass)
+## the contract executed EVM bytecode 602a60015500 (4 opcodes): SSTORE 42 -> slot 1
+## queried slot 1 through the VM, value = 0x000000000000000000000000000000000000000000000000000000000000002a
+## the EVM guest's storage is provable in GroveDB, bound to the exact slot and value:
+  slot 0x0000000000000000000000000000000000000000000000000000000000000001 = 0x000000000000000000000000000000000000000000000000000000000000002a
+
+## semantics exercises
+  storing zero clears the slot: after store-42 then store-0, GroveDB holds no slot 1
+  the 1024-element stack limit is enforced: 1025 pushes fail the execution
+
+# EVM-as-guest complete. Real EVM bytecode ran inside a Wasm guest under cosmwasm-vm,
+# its SSTORE landed in GroveDB on success, the exact stored slot is provable, and the
+# stack limit and zero-store-clears-slot semantics are exercised.

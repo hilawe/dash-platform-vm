@@ -1,0 +1,8 @@
+[target.wasm32-unknown-unknown]
+# The cosmwasm host imports are provided by the VM, so allow undefined symbols (they become wasm
+# imports). Also disable the newer Wasm proposals (bulk-memory, sign-extension) that recent Rust
+# enables by default but the cosmwasm-vm 1.5 gatekeeper does not accept.
+rustflags = [
+  "-C", "link-arg=--allow-undefined",
+  "-C", "target-feature=-bulk-memory,-sign-ext",
+]

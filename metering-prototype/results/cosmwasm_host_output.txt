@@ -1,0 +1,23 @@
+# CosmWasm host backend over GroveDB: the real cosmwasm_vm::Storage trait, with gas
+# from the real read cost, size-based write gas, and iterator-id management.
+
+## gas accounting
+  get alice (committed): gas=65300 (from the real GroveDB read cost)
+  set carol (new): gas=700 (proportional to bytes written)
+
+## two concurrent iterators, interleaved next() by id
+  iterator 1 -> alice
+  iterator 2 -> carol
+  iterator 1 -> bob
+  iterator 2 -> bob
+  iterator 1 -> carol
+  iterator 2 -> alice
+
+## determinism
+  read gas, write gas, and committed root hash are identical across two runs
+  committed root: fc1a983dced638ca1fab0e829c09541ddb8c8125387a8e97fb1d051cff68e40a
+
+# Host backend complete. Reads carry gas from the real GroveDB read cost, writes are
+# size-priced with the durable cost realized at commit, scan/next manage concurrent
+# iterators by id (exhausted ones dropped, unknown ids reported), and the result is
+# deterministic and committed atomically.

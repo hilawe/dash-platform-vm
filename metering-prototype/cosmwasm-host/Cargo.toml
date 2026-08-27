@@ -1,0 +1,21 @@
+[package]
+name = "cosmwasm-host"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+# CosmWasm host-backend step (follows docs/COSMWASM_STORAGE_ASSESSMENT.md). Implements the REAL
+# cosmwasm_vm::Storage backend trait (the host side the VM calls, with gas accounting and iterator
+# ids) over a GroveDB subtree, with a cost-to-gas adapter that derives CosmWasm gas from GroveDB's
+# measured OperationCost. Drives the trait directly rather than instantiating a compiled contract,
+# so it needs the vm crate for the trait but does not run wasmer. See src/main.rs.
+
+[dependencies]
+grovedb = { path = "../../../grovedb/grovedb", default-features = false, features = ["minimal", "estimated_costs"] }
+grovedb-element = { path = "../../../grovedb/grovedb-element" }
+grovedb-costs = { path = "../../../grovedb/costs" }
+grovedb-version = { path = "../../../grovedb/grovedb-version" }
+cosmwasm-vm = { version = "1.5", features = ["iterator"] }
+cosmwasm-std = { version = "1.5", features = ["iterator"] }
+tempfile = "3"
+serde = { version = "1", features = ["derive"] }

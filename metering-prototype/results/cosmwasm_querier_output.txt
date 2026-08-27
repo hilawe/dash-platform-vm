@@ -1,0 +1,16 @@
+# Module bindings, step 1: the cosmwasm_vm::Querier trait over Dash-native state in GroveDB.
+# A Dash token as a bank denom, answered from GroveDB with real read-cost gas.
+
+## bank balance query (a Dash token as a denom)
+  alice udash balance = 1000 (gas 64100)
+  bob = 500, carol (absent) = 0
+
+## custom Dash query (token supply)
+  udash total supply = 1500 (gas 37400)
+
+## error surfacing
+  a corrupt stored balance surfaces an error: stored amount "not-a-number" is not an integer (corrupt)
+
+# Step 1 complete. The Querier answers a contract's reads against Dash-native token
+# state in GroveDB, with gas from the real read cost, missing keys as zero, and
+# corruption surfaced as an error rather than a false zero.

@@ -1,0 +1,24 @@
+[package]
+name = "metering-prototype"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+# Phase A calibration harness for the Dash Platform execution-layer metering prototype.
+# Links GroveDB at the frozen candidate (v5.0.0, 9b98a356) as a library. No VM, no consensus,
+# no networking. See docs/METERING_PROTOTYPE_SPEC.md.
+
+[dependencies]
+grovedb = { path = "../../grovedb/grovedb", default-features = false, features = ["minimal", "estimated_costs"] }
+grovedb-costs = { path = "../../grovedb/costs" }
+grovedb-element = { path = "../../grovedb/grovedb-element" }
+grovedb-version = { path = "../../grovedb/grovedb-version" }
+tempfile = "3"
+
+[[bin]]
+name = "calibrate"
+path = "src/main.rs"
+
+[[bin]]
+name = "phase_c"
+path = "src/phase_c.rs"

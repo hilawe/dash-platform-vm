@@ -1,0 +1,15 @@
+[package]
+name = "compute-bench"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+# Phase E of the metering prototype: an optional bound on the COMPUTE dimension of terminal work.
+# Runs a fixed integer workload through an off-the-shelf deterministic WebAssembly interpreter with
+# FUEL metering (a deterministic executed-operation count, not wall-clock), giving the compute
+# dimension a consensus-safe unit. No store, no consensus, no networking, no GroveDB. See
+# docs/METERING_PROTOTYPE_SPEC.md phase E.
+
+[dependencies]
+wasmi = "0.31"
+wat = "1"

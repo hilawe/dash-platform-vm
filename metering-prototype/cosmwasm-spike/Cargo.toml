@@ -1,0 +1,22 @@
+[package]
+name = "cosmwasm-spike"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+# The CosmWasm-on-GroveDB spike (docs/COSMWASM_STORAGE_ASSESSMENT.md, "recommended next artifact").
+# Implements the real cosmwasm_std::Storage trait over a GroveDB subtree and drives it through the
+# real cw-storage-plus library (get/set/remove/ordered range inside a transaction), then proves a
+# piece of the resulting contract state with GroveDB prove_query and verifies it. No wasmer, no
+# compiled contract: this exercises the GroveDB-backing question, which is the uncertain part, not
+# cosmwasm-vm's contract-calling, which is well established.
+
+[dependencies]
+grovedb = { path = "../../../grovedb/grovedb", default-features = false, features = ["minimal", "estimated_costs"] }
+grovedb-element = { path = "../../../grovedb/grovedb-element" }
+grovedb-costs = { path = "../../../grovedb/costs" }
+grovedb-version = { path = "../../../grovedb/grovedb-version" }
+cosmwasm-std = { version = "1.5", features = ["iterator"] }
+cw-storage-plus = "1.2"
+serde = { version = "1", features = ["derive"] }
+tempfile = "3"

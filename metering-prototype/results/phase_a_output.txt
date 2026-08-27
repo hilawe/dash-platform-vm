@@ -1,0 +1,54 @@
+# Phase A calibration, GroveDB frozen candidate 9b98a356 (v5.0.0)
+# measured OperationCost per operation and tree density. Cost is deterministic;
+# each measured cell is run twice and required identical (see assertions).
+
+insert   density=16     item=32    added=178    replaced=705    removed=0      seek=14   loaded=794     hash_calls=12   wall_ns=31585
+insert   density=16     item=128   added=275    replaced=1190   removed=0      seek=14   loaded=1274    hash_calls=14   wall_ns=39211
+insert   density=16     item=512   added=661    replaced=3120   removed=0      seek=14   loaded=3204    hash_calls=20   wall_ns=293227
+insert   density=256    item=32    added=178    replaced=1269   removed=0      seek=22   loaded=1522    hash_calls=20   wall_ns=70963
+insert   density=256    item=128   added=275    replaced=2142   removed=0      seek=22   loaded=2386    hash_calls=22   wall_ns=59587
+insert   density=256    item=512   added=661    replaced=5616   removed=0      seek=22   loaded=5860    hash_calls=28   wall_ns=70171
+insert   density=4096   item=32    added=178    replaced=1833   removed=0      seek=30   loaded=2250    hash_calls=28   wall_ns=118257
+insert   density=4096   item=128   added=275    replaced=3094   removed=0      seek=30   loaded=3498    hash_calls=30   wall_ns=447946
+insert   density=4096   item=512   added=661    replaced=8112   removed=0      seek=30   loaded=8516    hash_calls=36   wall_ns=178345
+
+replace  density=16     item=32    added=0      replaced=564    removed=0      seek=11   loaded=754     hash_calls=8    wall_ns=27418
+replace  density=16     item=128   added=0      replaced=952    removed=0      seek=11   loaded=1234    hash_calls=10   wall_ns=28585
+replace  density=16     item=512   added=0      replaced=2496   removed=0      seek=11   loaded=3164    hash_calls=16   wall_ns=34294
+replace  density=256    item=32    added=0      replaced=1128   removed=0      seek=19   loaded=1482    hash_calls=16   wall_ns=51545
+replace  density=256    item=128   added=0      replaced=1904   removed=0      seek=19   loaded=2346    hash_calls=18   wall_ns=470655
+replace  density=256    item=512   added=0      replaced=4992   removed=0      seek=19   loaded=5820    hash_calls=24   wall_ns=65588
+replace  density=4096   item=32    added=0      replaced=1692   removed=0      seek=27   loaded=2210    hash_calls=24   wall_ns=122050
+replace  density=4096   item=128   added=0      replaced=2856   removed=0      seek=27   loaded=3458    hash_calls=26   wall_ns=119841
+replace  density=4096   item=512   added=0      replaced=7488   removed=0      seek=27   loaded=8476    hash_calls=32   wall_ns=170386
+
+delete   density=16     item=32    added=0      replaced=423    removed=178    seek=13   loaded=940     hash_calls=4    wall_ns=50212
+delete   density=16     item=128   added=0      replaced=714    removed=275    seek=13   loaded=1516    hash_calls=4    wall_ns=44919
+delete   density=16     item=512   added=0      replaced=1872   removed=661    seek=13   loaded=3832    hash_calls=4    wall_ns=86839
+delete   density=256    item=32    added=0      replaced=987    removed=178    seek=21   loaded=1668    hash_calls=12   wall_ns=63254
+delete   density=256    item=128   added=0      replaced=1666   removed=275    seek=21   loaded=2628    hash_calls=12   wall_ns=77255
+delete   density=256    item=512   added=0      replaced=4368   removed=661    seek=21   loaded=6488    hash_calls=12   wall_ns=78130
+delete   density=4096   item=32    added=0      replaced=1551   removed=178    seek=29   loaded=2396    hash_calls=20   wall_ns=167886
+delete   density=4096   item=128   added=0      replaced=2618   removed=275    seek=29   loaded=3740    hash_calls=20   wall_ns=228182
+delete   density=4096   item=512   added=0      replaced=6864   removed=661    seek=29   loaded=9144    hash_calls=20   wall_ns=233515
+
+# Phase A step 2: worst-case estimator vs measured, INSERT of an item.
+# columns: est_added/meas_added est_replaced/meas_replaced (bytes), headroom = est/meas
+estimate density=16     item=32    levels=7   added=178   /178    replaced=589815/705    add_headroom=1.00x rep_headroom=836.62x
+estimate density=16     item=128   levels=7   added=275   /275    replaced=589815/1190   add_headroom=1.00x rep_headroom=495.64x
+estimate density=16     item=512   levels=7   added=661   /661    replaced=589815/3120   add_headroom=1.00x rep_headroom=189.04x
+estimate density=256    item=32    levels=12  added=178   /178    replaced=917490/1269   add_headroom=1.00x rep_headroom=723.00x
+estimate density=256    item=128   levels=12  added=275   /275    replaced=917490/2142   add_headroom=1.00x rep_headroom=428.33x
+estimate density=256    item=512   levels=12  added=661   /661    replaced=917490/5616   add_headroom=1.00x rep_headroom=163.37x
+estimate density=4096   item=32    levels=18  added=178   /178    replaced=1310700/1833   add_headroom=1.00x rep_headroom=715.06x
+estimate density=4096   item=128   levels=18  added=275   /275    replaced=1310700/3094   add_headroom=1.00x rep_headroom=423.63x
+estimate density=4096   item=512   levels=18  added=661   /661    replaced=1310700/8112   add_headroom=1.00x rep_headroom=161.58x
+
+# Phase A step 3: asserting the promoted properties.
+# all promoted Phase A properties asserted: exact added prediction, density
+# independence, propagation over-prediction >100x, zero durable growth on replace,
+# and delete conservation (removed == inserted added_bytes).
+
+# Phase A complete: measured costs captured for insert, replace, delete across
+# three densities and three item sizes, determinism asserted, and every promoted
+# empirical property asserted rather than merely printed.

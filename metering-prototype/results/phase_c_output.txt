@@ -1,0 +1,34 @@
+# Phase C: per-class terminal-work vectors, measured against real GroveDB 9b98a356
+# density = 256 filler siblings per subtree. deposit = build-time added-bytes cost;
+# terminal = cumulative cost of the class's full terminalization, per dimension.
+
+deposit   single_owner         fan_out=0   added=568    replaced=4530    removed=0      seek=80   loaded=6108     hash=83  
+terminal  single_owner         fan_out=0   added=0      replaced=4073    removed=568    seek=83   loaded=7397     hash=67  
+
+deposit   autonomous           fan_out=1   added=568    replaced=4530    removed=0      seek=80   loaded=6108     hash=83  
+terminal  autonomous           fan_out=1   added=162    replaced=4325    removed=568    seek=94   loaded=7918     hash=79  
+
+deposit   autonomous           fan_out=8   added=568    replaced=4530    removed=0      seek=80   loaded=6108     hash=83  
+terminal  autonomous           fan_out=8   added=1296   replaced=8339    removed=568    seek=213  loaded=13863    hash=199 
+
+deposit   autonomous           fan_out=64  added=568    replaced=4530    removed=0      seek=80   loaded=6108     hash=83  
+terminal  autonomous           fan_out=64  added=10368  replaced=63576   removed=568    seek=1543 loaded=91493    hash=1529
+
+deposit   irrevocable_request  fan_out=0   added=568    replaced=4530    removed=0      seek=80   loaded=6108     hash=83  
+terminal  irrevocable_request  fan_out=0   added=170    replaced=4325    removed=568    seek=94   loaded=7918     hash=79  
+
+deposit   deferred_task        fan_out=0   added=718    replaced=5794    removed=0      seek=110  loaded=7899     hash=113 
+terminal  deferred_task        fan_out=0   added=0      replaced=5224    removed=718    seek=114  loaded=9537     hash=92  
+
+deposit   hook_binding         fan_out=0   added=718    replaced=5794    removed=0      seek=110  loaded=7899     hash=113 
+terminal  hook_binding         fan_out=0   added=0      replaced=5224    removed=718    seek=114  loaded=9537     hash=92  
+
+deposit   lease_exit           fan_out=0   added=718    replaced=5794    removed=0      seek=110  loaded=7899     hash=113 
+terminal  lease_exit           fan_out=0   added=147    replaced=6375    removed=718    seek=142  loaded=11254    hash=120 
+
+# asserted: reclamation conservation (removed == deposited) for every class,
+# single-owner adds zero durable bytes at terminalization, and autonomous distribution
+# is linear in fan-out at 162 durable bytes per recipient.
+# Phase C complete: each class's deposit and terminalization cost measured per
+# dimension. The added-bytes column is the durable footprint; removed-bytes is what
+# terminalization reclaims; the autonomous rows show distribution scaling with fan_out.

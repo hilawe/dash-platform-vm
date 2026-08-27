@@ -18,25 +18,37 @@ built into a shipping product.
 - **[docs/COMMUNITY_BRIEF.md](docs/COMMUNITY_BRIEF.md)** is the short version for a reader who already
   knows the ecosystem.
 - **[SUMMARY.md](SUMMARY.md)** is the research summary with the findings and recommendations.
-- **[docs/EXECUTION_ENGINE_ADOPT_VS_BUILD.md](docs/EXECUTION_ENGINE_ADOPT_VS_BUILD.md)** is the
-  decision synthesis, which recommends adopting CosmWasm backed by GroveDB and names five conditions
-  to close before that choice is committed.
 - **[docs/EXECUTION_ENGINE_VM_COMPARISON.md](docs/EXECUTION_ENGINE_VM_COMPARISON.md)** screens the
-  alternative engines, MoveVM included, against the same requirements.
+  candidate engines, MoveVM and the EVM included, against the requirements.
+- **[docs/EXECUTION_ENGINE_ADOPT_VS_BUILD.md](docs/EXECUTION_ENGINE_ADOPT_VS_BUILD.md)** is the
+  decision document, which weighs adopting an existing engine against building one and states its
+  recommendation together with the five conditions that must close before any choice is committed.
+- **[docs/EVALUATION_DIMENSIONS.md](docs/EVALUATION_DIMENSIONS.md)** is the scoring rubric, fixed
+  before the designs were compared.
 - **[DESIGN.md](DESIGN.md)** is the full architecture, version 12, review-complete and frozen.
 
-## The finding, in one paragraph
+## How engines are evaluated
 
-The question that decides the engine is provability. Dash Platform's distinguishing property is that
-state carries membership, non-membership, and secondary-index proofs to light clients, and an
-execution engine that cannot preserve that is not a candidate however good it is otherwise. The
-Ethereum Virtual Machine fails that test as a base layer, because its fixed 256-bit-slot storage model
-presumes a Merkle Patricia trie. CosmWasm passes it, because its storage interface assumes an
-authenticated, lexicographically ordered byte-key store with range iteration and proofs, which is the
-shape GroveDB already has. Backing CosmWasm with GroveDB is a substitution between two authenticated
-ordered stores rather than a graft, and that is demonstrated here at every layer by running code, up
-to and including a minimal Ethereum interpreter running as a guest contract whose storage writes land
-in GroveDB and prove.
+No engine is assumed here. Candidates are screened against Platform's own requirements, and the
+criterion that does most of the work is provability. Dash Platform's distinguishing property is that
+state carries membership, non-membership, and secondary-index proofs to light clients, so an engine
+whose storage model cannot preserve that is not a candidate however good it is otherwise. Determinism
+across validators, a worst-case block bound that holds under adversarial load, and the ability to
+reach Dash-native capabilities are the other standing criteria.
+
+Applying that screen has produced results worth stating plainly, each at the evidence grade below.
+The Ethereum Virtual Machine does not survive it as a BASE layer, because its fixed 256-bit-slot
+storage model presumes a Merkle Patricia trie, though it is reachable as a GUEST, which is
+demonstrated here by a minimal Ethereum interpreter running as a contract whose storage writes land in
+GroveDB and prove. CosmWasm does survive it, because its storage interface assumes an authenticated,
+lexicographically ordered byte-key store with range iteration and proofs, which is the shape GroveDB
+already has, and that substitution is demonstrated by running code at every layer. MoveVM clears the
+screen too and beats CosmWasm on determinism, while losing on ordered indexed provability.
+
+Those are screen outcomes, not a settled choice. The decision document does recommend a direction, and
+it makes that recommendation conditional on five gates, none of which has closed yet. Determinism
+across validators is the first of them and the assumption whose failure would end the approach. Read
+the recommendation with its conditions attached rather than on its own.
 
 ## Evidence grades
 
@@ -111,10 +123,11 @@ output. The adjudications and the findings that survived them are reflected thro
 
 ## Status and license
 
-`DESIGN.md` is at version 12 and frozen. The open question is the execution engine, and the decision
-synthesis recommends adopting CosmWasm subject to five conditions, of which determinism across
-validators is the one to answer first, because it is the assumption whose failure would end the
-approach. `TODO.md` carries the remaining work.
+`DESIGN.md` is at version 12 and frozen. The execution engine remains the open question. A direction
+is recommended in the decision document, subject to five conditions that have not closed, and
+determinism across validators is the one to answer first, because it is the assumption whose failure
+would end that direction. `TODO.md` carries the remaining work, including the outstanding engine
+evaluations.
 
 Licensed under Apache-2.0, see [LICENSE](LICENSE). `metering-prototype/cosmwasm-host/testdata/`
 contains `hackatom.wasm`, third-party test data from the CosmWasm project, also Apache-2.0, with its

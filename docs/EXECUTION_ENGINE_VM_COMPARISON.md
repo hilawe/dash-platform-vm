@@ -59,9 +59,12 @@ Two properties make MoveVM stronger than CosmWasm on the dimension weighted firs
 dimension the adopt-versus-build note named as the assumption whose failure would sink adoption.
 
 - **There is no floating point in the language.** Move's value types are the sized unsigned integers,
-  booleans, addresses, and structs built from them. CosmWasm reaches the same place by rejecting float
-  opcodes during Wasm validation, which is a check that has to be correct and has to stay correct across
-  versions. Move gets there by having no such opcode to reject. Absence beats a validation pass.
+  booleans, addresses, and structs built from them. CosmWasm does NOT reach the same place. Reading
+  cosmwasm-vm 1.5.11 for gate 1 established that floats are explicitly permitted, and that determinism
+  rests instead on the singlepass compiler canonicalizing NaN payloads by default
+  (`docs/GATE1_DETERMINISM.md`). That is a guarantee held by compiler configuration rather than by the
+  absence of the operation, so Move's advantage here is wider than a validation-pass comparison would
+  suggest. Absence beats a compiler flag.
 - **Metering lives in the interpreter rather than in compiled-in gas points.** MoveVM charges per
   instruction as its interpreter executes, so there is no compiler in the trusted path. CosmWasm's
   determinism argument depends on pinning both cosmwasm-vm and the wasmer singlepass compiler across the

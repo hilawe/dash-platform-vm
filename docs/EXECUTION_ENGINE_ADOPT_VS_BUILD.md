@@ -110,10 +110,14 @@ These are the gates. Each maps to a high-weight evaluation dimension in `docs/EV
 and is the kind of failure that presents as a fork or a dropped platform property, so each wants a
 verified answer, not an assurance, before adoption is final.
 
-1. Determinism, the first-weighted dimension. Confirm CosmWasm's determinism controls (the singlepass
-   compiler, gas-metering boundary timing, absence of floating point, and version pinning of both
-   cosmwasm-vm and wasmer across validators) satisfy the dimension's named divergence sources. This is
-   the failure mode that presents as consensus forks.
+1. Determinism, the first-weighted dimension. Establish what any candidate engine must satisfy to
+   execute identically on every validator, and which candidates satisfy it. For CosmWasm the controls
+   are the fixed singlepass compiler, gas-metering boundary timing, the Gatekeeper middleware's feature
+   rejections, NaN canonicalization, and version pinning of cosmwasm-vm and wasmer across validators.
+   NOTE that an earlier version of this list named the absence of floating point as one of those
+   controls, which reading the source disproved. Floats are permitted and NaN canonicalization carries
+   the determinism instead, recorded in `docs/GATE1_DETERMINISM.md`. This is the failure mode that
+   presents as consensus forks.
 2. Worst-case block bound, the third-weighted dimension. The metering prototype measured the storage and
    compute cost dials. Confirm that VM execution plus GroveDB writes plus proof generation stays inside
    the roughly 0.5-second under-load block cadence measured in Phase 0, under adversarial load and not

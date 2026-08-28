@@ -601,11 +601,25 @@ Added after round 4, each one a quantity a v5 rule is denominated in:
       proceed in parallel once determinism clears, since its shape is demonstrated and its remainder is
       node integration against known Dash primitives.
 
-  - [ ] GATE 1, DETERMINISM (evaluation dimension 1, goes first). Confirm CosmWasm's determinism controls
-        (the singlepass compiler, gas-metering boundary timing, absence of floating point, and version
-        pinning of cosmwasm-vm and wasmer across validators) satisfy the dimension's named divergence
-        sources. This is the failure that presents as consensus forks. Because the execution engine is
-        architecture-bearing, answer it via the clean-room multi-model design round, not another spike.
+  - [ ] GATE 1, DETERMINISM (evaluation dimension 1, goes first). STARTED 2026-08-27, findings in
+        docs/GATE1_DETERMINISM.md. Reframed engine-general rather than as a CosmWasm confirmation, since a
+        question phrased to be confirmed usually is. Establish what ANY candidate engine must satisfy to
+        execute identically on every validator, and which candidates satisfy it. This is the failure that
+        presents as consensus forks.
+        DONE so far, at REPOSITORY-RESOLVED grade by reading cosmwasm-vm 1.5.11, wasmer 4.2.2 and
+        singlepass 4.2.2. SIMD, threads, bulk memory, reference types and exception handling are each
+        rejected at two layers. Metering is a compiler middleware and singlepass is fixed, not
+        configurable.
+        CORRECTED a claim this repository had published. Floating point is NOT rejected. The Gatekeeper
+        middleware ships allow_floats: true by default and the crate tests that a float-bearing contract
+        compiles, so determinism for floats rests on singlepass canonicalizing NaN payloads rather than on
+        the operation being absent. Two documents were fixed. Also noted, cosmwasm-vm's deterministic_only
+        validator flag appears inert, because the wasmparser check behind it is compiled out unless a
+        cargo feature wasmer does not select is enabled.
+        REMAINING. Run the clean-room design round against the engine-general framing, decide whether Dash
+        should reject float-bearing program code at deployment regardless of what the VM permits, and read
+        limiting_tunables.rs for the non-Wasm divergence sources (host returns, gas-exhaustion timing,
+        memory growth). The design round is the blocking step, since the packets need dispatching.
   - [ ] GATE 2, WORST-CASE BLOCK BOUND (dimension 3). Confirm VM execution plus GroveDB writes plus proof
         generation stays inside the ~0.5 s under-load block cadence measured in Phase 0, under adversarial
         load and not just typical load. The metering prototype measured the storage and compute dials

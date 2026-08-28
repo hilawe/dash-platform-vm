@@ -25,6 +25,8 @@ built into a shipping product.
   recommendation together with the five conditions that must close before any choice is committed.
 - **[docs/EVALUATION_DIMENSIONS.md](docs/EVALUATION_DIMENSIONS.md)** is the scoring rubric, fixed
   before the designs were compared.
+- **[docs/FORK_OR_INTEGRATE.md](docs/FORK_OR_INTEGRATE.md)** asks whether an engine should be forked
+  the way Tendermint became Tenderdash, or integrated through the extension points it already provides.
 - **[DESIGN.md](DESIGN.md)** is the full architecture, version 12, review-complete and frozen.
 
 ## How engines are evaluated

@@ -104,6 +104,15 @@ real VM's determinism and metering demand. Building also discards the demonstrat
 fit and starts the ecosystem from zero. The control a bespoke VM offers is real, but nothing measured so
 far shows CosmWasm cannot meet the requirements, so paying that surface cost is not yet justified.
 
+## A related question, forking rather than adopting
+
+Adopting an engine and forking one are different commitments, and the Tenderdash precedent makes the
+second look more routine than it is. That question is treated separately in
+`docs/FORK_OR_INTEGRATE.md`, which concludes that CosmWasm provides the extension points the
+integration needs, demonstrated by the spikes running against unmodified upstream crates, so a fork is
+not currently justified. It also records why an Ethermint-derived route fails on two independent
+counts.
+
 ## Conditions to close before committing
 
 These are the gates. Each maps to a high-weight evaluation dimension in `docs/EVALUATION_DIMENSIONS.md`

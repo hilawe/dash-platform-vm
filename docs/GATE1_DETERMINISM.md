@@ -67,11 +67,24 @@ is considerably easier to get wrong quietly.
 Two smaller observations came out of the same reading, both worth carrying into the design round.
 
 The `deterministic_only: true` flag that cosmwasm-vm sets in its validator features
-(`parsed_wasm.rs:30`) appears to be inert. In wasmparser 0.95 the corresponding check is
-`check_non_deterministic_enabled`, whose body is guarded by `cfg!(feature = "deterministic")`, and
-wasmer declares its wasmparser dependency with `default-features = false` without selecting that
-feature. The flag therefore reads as a determinism control while enforcing nothing, which is a
-different failure shape from a missing control and a harder one to notice.
+(`parsed_wasm.rs:30`) is inert, and its polarity is the opposite of what its name suggests. Both halves
+matter and the second was contributed by the design round.
+
+The check is `check_non_deterministic_enabled` in wasmparser 0.95, called at the float operator
+validation sites such as `check_fcmp_op`. Its body is
+`if cfg!(feature = "deterministic") && !self.features.deterministic_only { bail!(...) }`. Wasmer
+declares its wasmparser dependency with `default-features = false` and does not select the
+`deterministic` feature, so the guard is compiled out and the function is unconditionally `Ok(())`. The
+flag enforces nothing, which is a different failure shape from a missing control and a harder one to
+notice.
+
+The sharper point is what would happen if the feature WERE enabled. The condition bails when
+`deterministic_only` is FALSE, so with the feature on, `true` PERMITS float operators and `false`
+rejects them. The field's own documentation reads "Whether or not only deterministic instructions are
+allowed", which implies the reverse. So enabling the missing cargo feature would not close the float
+hole either, given the value CosmWasm sets. Whether this is a polarity defect in wasmparser or a
+capability flag whose name misleads is not resolvable from the source alone, but the observable
+behaviour is not in doubt.
 
 The Gatekeeper's own documentation comment describes it as a middleware that "ensures only
 deterministic operations are used (i.e. no floats)", directly above a default configuration that allows
@@ -93,28 +106,69 @@ engines and Move still loses there. It does mean the determinism argument for Co
 in terms of compiler configuration and version pinning rather than in terms of absent operations, and
 that pinning is exactly gate 5.
 
-## The design round, first returned instrument
+## The design round, three instruments returned
 
 The clean-room round is dispatched. Its packet asks for the divergence enumeration and the evidence
 standard FIRST, committed before the reader sees any of this system's configuration, and then presents
 the configuration as raw excerpts with no interpretation attached. The packet does not contain the
 findings above, so a reader reaching them reaches them independently.
 
-One instrument has returned so far, reasoning from the packet alone with no repository access. It is
-one source, so it is one voice rather than corroboration in the plural sense, and the remaining
-instruments have not run.
+Three instruments have now returned, each reasoning from the packet alone with no repository access.
+They come from three different sources, so their agreement is corroboration in the plural sense rather
+than one voice repeated. A fourth is outstanding and shares a source with one that has returned, so
+when it arrives its agreement adds confidence but not independence.
 
-It independently reached all three findings above. It identified that the Gatekeeper default permits
-floats while the adjacent documentation claims otherwise, that `deterministic_only` "may compile to no
-check", and that the compiler is selected "according to a compile-time feature" and is therefore a
-build-configuration divergence surface rather than a fixed property.
+ALL THREE independently reached all three findings above. Each identified that the Gatekeeper default
+permits floats while the adjacent documentation claims otherwise, that the `deterministic_only` check
+is compiled out and therefore dead, and that the compiler is selected by a compile-time feature and is
+a build-configuration divergence surface rather than a fixed property. None of those was stated in the
+packet, which presented the excerpts without interpretation.
 
 One caveat on weight. Part A4 of the packet asks the reader to enumerate failure shapes where a control
 is present but inert, before showing any code. That primes the category, so locating the
 `deterministic_only` instance is evidence of detection rather than of independently generating the
 category. The float and compiler findings were not primed in the same way.
 
-It also raised two divergence sources this note had not recorded, both from the same excerpts.
+### What the round added
+
+Beyond corroboration, the round contributed the polarity finding recorded above and a set of divergence
+sources this note had not carried. The most substantive are these.
+
+- **The host's floating-point control registers.** Guest results can depend on the rounding mode and
+  flush-to-zero bits in the host process (MXCSR on x86-64, FPCR on aarch64), which the host may have
+  set for its own reasons. Unless the engine saves and restores them around entry, a host-side change
+  is observable inside the guest. This was ranked the single most-likely-overlooked source, and neither
+  this note nor the earlier reading had it.
+- **Compilation-cache keying.** If a compiled artifact is cached by module hash alone rather than by
+  module hash together with backend, flags, and engine version, a validator can serve a cached artifact
+  built under a configuration it no longer runs.
+- **Unmetered compilation.** Parsing, validating, and compiling an admitted module is work performed
+  before any gas is charged, and a half-second block cadence cannot absorb an unbounded compile. This
+  wants a compile-cost bound at admission.
+- **Admission policy and runtime policy as separate objects.** If the tool that decides whether code may
+  be stored is not built from the same constructor as the engine that later runs it, the two can drift.
+  One reviewer noted that `WasmFeatures` and `GatekeeperConfig` are already separate objects that
+  already disagree about floats, which is that shape occurring inside the crate itself.
+- **Guest-visible host output.** Error strings rendered through `Display`, hash-map iteration order in
+  host code, and ABI padding are all paths by which host implementation detail reaches consensus.
+
+### Where the reviewers disagreed, recorded rather than smoothed
+
+The verdicts split, and the split is the useful part. One source concluded that the configuration as
+shown meets its threshold for advising against adoption outright, on the grounds that a core
+determinism check failing silently is an unacceptable consensus risk. Another declined to refuse the
+crate, holding that none of this is disqualifying for CosmWasm as a library, and refused instead any
+host that treats these excerpts as proof, since the engine leaves the decisions open and the embedding
+is where they get closed.
+
+Both readings are defensible and they differ on where responsibility sits rather than on any fact. The
+practical consequence is the same either way. A host that calls `Gatekeeper::default()`, leaves the
+Cranelift feature reachable, and has no cross-architecture float evidence has not made the determinism
+argument, whatever one concludes about the crate.
+
+### Two divergence sources the first instrument raised
+
+Both from the same excerpts, and both still open.
 
 - **The metering limit is constructed as zero.** `make_compiling_engine` builds the metering middleware
   with `gas_limit = 0`. That is very likely a placeholder replaced per call at instantiation, but the
@@ -135,12 +189,24 @@ The reading above settles which controls exist. It does not settle whether they 
 that is the question the gate actually asks. Three items remain, and the first is the one the build
 plan calls for.
 
-1. The clean-room design round on determinism, run against the engine-general framing at the top of
-   this note rather than as a CosmWasm confirmation. Independent sources, no sight of this note,
-   committed before comparison.
-2. Whether NaN canonicalization plus a pinned compiler build is a sufficient float story for a
-   consensus system, or whether program code should be rejected for containing floats at deployment
-   regardless of what the VM permits. This is a Dash-side policy question that CosmWasm leaves open.
-3. Non-determinism sources outside the Wasm module itself, meaning host-function return values, gas
+1. The remaining instrument of the design round, which shares a source with one already returned.
+   The round itself has run and its results are folded above.
+2. The float question is now the round's clearest recommendation and it needs an owner decision.
+   Every source that addressed it preferred forbidding floats over canonicalizing them, on the grounds
+   that forbidding carries the lower proof burden. Canonicalization has to be re-established on every
+   backend and at every engine upgrade, whereas a rejection at admission is checked once. Concretely
+   this means constructing `GatekeeperConfig { allow_floats: false, .. }` rather than calling
+   `Gatekeeper::default()`, and rejecting float types and opcodes at deployment.
+3. Cross-architecture float evidence, if floats stay permitted. Bit-pattern comparison on x86-64 and
+   aarch64, on every backend that can be built, at the exact wasmer version in use. A test named
+   `float_instrs_are_deterministic` is not that evidence until its body is read and its architecture
+   matrix is known, and reading it is a specific next task.
+4. The host-side floating-point control register question, which is new and unexamined here. Determine
+   whether the engine saves and restores the host rounding mode and flush-to-zero bits around entry, or
+   whether the embedding must.
+5. Non-determinism sources outside the Wasm module itself, meaning host-function return values, gas
    exhaustion timing, and memory growth limits. The limiting tunables in
-   `wasm_backend/limiting_tunables.rs` were not read for this note and should be.
+   `wasm_backend/limiting_tunables.rs` were not read for this note and should be, and the round raised
+   the priority of that reading by noting the memory limit is optional.
+6. Where the zero gas limit is replaced with a real per-call bound, and whether compilation itself is
+   bounded before admission.

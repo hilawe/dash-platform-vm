@@ -270,15 +270,28 @@ At R = 40,730 propagation units per block, and the Phase 0 under-load cadence of
 | hook_binding | 5224 | 7 | ~1.21M |
 | lease_exit | 6375 | 6 | ~1.04M |
 
-One real finding. A single autonomous terminalization at fan-out 64 costs 63,576 propagation units, MORE
-than the entire per-block drain budget of 40,730, so it cannot be serviced in one block at this R (shown
-as 0 per block, meaning fewer than one). This is not a defect but a constraint the design already
-anticipates, since high-fan-out distribution work must either be serviced across blocks by the batched
-drain
-(the per-batch latency W dial from VERIFY item 1) or provisioned against a larger R. The measurement
-locates the exact fan-out at which a single terminalization exceeds a one-block budget, which is the
-kind
-of dial-setting input the prototype was built to produce.
+One real finding, and its interpretation here was WRONG. Corrected 2026-08-30 after an independent
+review with repository access.
+
+A single autonomous terminalization at fan-out 64 costs 63,576 propagation units, MORE than the entire
+per-block drain budget of 40,730, so it cannot be serviced in one block at this R (shown as 0 per block,
+meaning fewer than one). That measurement stands.
+
+The claim that followed it does not. This document said the work "must either be serviced across blocks
+by the batched drain or provisioned against a larger R", which asserted a serviceability the implemented
+model does not have. The queue drains only a COMPLETE front item whose whole work vector fits the
+remaining per-block rate, and it breaks on the first item that does not fit
+(`meter-core/src/lib.rs`, the drain loop). There is no partial-progress mechanism, so an item larger
+than R is never drained and blocks every item behind it. Servicing it across blocks is what the design
+intends and what the prototype does not implement.
+
+Provisioning a larger R remains a real option. Batching across blocks is not, at this revision.
+
+This is now tracked as a schedulability defect rather than a dial-setting result, since incremental
+growth, reclassification, cost recalibration, or a future decrease in R can all produce an oversized
+queued item even when the admission path would have rejected that vector outright. The measurement
+still locates the fan-out at which a single terminalization exceeds a one-block budget, which is useful,
+but it locates a defect boundary rather than a tuning input.
 
 ## D3, the partition point (VERIFY 6)
 

@@ -11,9 +11,24 @@ Evidence grades follow the project convention. EXECUTION-PRODUCED means demonstr
 against GroveDB at the frozen revision. REPOSITORY-RESOLVED means read from the checked-out GroveDB
 source. ASSERTED means stated from knowledge of an external system not checked out here.
 
+## A version caveat that qualifies everything below
+
+Added 2026-08-30 after an independent review with repository access. Every CosmWasm result in this
+project was produced against cosmwasm-vm 1.5.11. That review reports the 1.5.x line reached end of
+security support on 2025-04-30, with 2.3.x and 3.0.x as the supported lines. That claim is ASSERTED and
+has NOT been verified here, and verifying it is now a blocking task before any adoption decision.
+
+If it holds, the consequence is specific rather than fatal. The storage and provability results remain
+valid feasibility evidence, since they turn on the shape of the storage interface rather than on a
+patch version. They cannot carry a current adoption recommendation, because interface changes, gas
+rules, host functions, compiler behaviour, and supported toolchains all have to be re-established on a
+supported line, and the gate 1 findings are tied to the old dependency graph specifically. Read the
+recommendation below as being about an architecture on evidence from a version that may no longer be
+supported.
+
 ## Recommendation
 
-Adopt CosmWasm as the execution engine, backed by GroveDB, and treat Ethereum Virtual Machine (EVM)
+CosmWasm is the LEADING CANDIDATE under evaluation as the execution engine, backed by GroveDB, and treat Ethereum Virtual Machine (EVM)
 compatibility as a later guest-shape design question rather than a base-layer commitment. Three things
 carry this. The gating provability question is answered with running evidence at every layer. The fit is
 structural rather than lucky, because CosmWasm was designed against exactly the kind of authenticated
@@ -21,7 +36,9 @@ ordered key-value store GroveDB is. And the work that remains is bounded node in
 Dash-native bindings, not open-ended VM design, which is the part where consensus forks live.
 
 Build is justified only if a specific determinism, gas-bound, sandbox, or native-capability requirement
-is shown to be unmeetable within CosmWasm. No such blocker has surfaced in the spikes. Until one does,
+is shown to be unmeetable within CosmWasm. Note that this framing puts the burden on the build arm,
+which an independent review identified as premature. The gates below have not produced comparable
+evidence across candidates, so 'leading candidate' is the widest claim the evidence currently supports. No such blocker has surfaced in the spikes. Until one does,
 building a new VM would reinvent what CosmWasm already provides (deterministic metering, a contract
 binary interface, a storage abstraction) and take on the largest security surface in the system without
 a demonstrated reason.

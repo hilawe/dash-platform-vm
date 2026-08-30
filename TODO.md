@@ -601,6 +601,52 @@ Added after round 4, each one a quantity a v5 rule is denominated in:
       proceed in parallel once determinism clears, since its shape is demonstrated and its remainder is
       node integration against known Dash primitives.
 
+- [ ] P1 DEFECT, SCHEDULABILITY. A terminal-work item larger than the per-block drain rate R is never
+      drained and blocks every item behind it, because the queue drains only a complete front item and
+      breaks on the first that does not fit. Confirmed 2026-08-30 by an independent review with
+      repository access, and confirmed here against meter-core's drain loop. The admission path would
+      reject such a vector outright, but incremental growth, reclassification, cost recalibration, and a
+      future decrease in R can each produce the state. docs/METERING_RESULTS.md already contained the
+      evidence (fan-out 64 at 63,576 units against an R of 40,730) and asserted it could be serviced
+      across blocks, which the model cannot do. That claim is now corrected in place.
+      OWNER DECISION on the remedy, three named options. Make terminalization resumable with a persisted
+      cursor and bounded step cost; or require every object's maximum atomic terminal step to stay at or
+      below the minimum future R; or use a scheduler that can skip an oversized item without starving it
+      or violating rights. Then add an invariant that every queued obligation is schedulable, and test
+      growth, reclassification, policy change, and mass retirement against it.
+
+- [ ] P1 DEFECT, UNBOUNDED SCAN BEFORE CHARGE. cosmwasm-host's effective_range builds a GroveDB
+      SizedQuery with limit None, materializes the whole result and the merged overlay, and only then
+      returns the gas charge. Charging measured work after performing it is accounting, not admission
+      control, so a large subtree can consume time and memory before the VM can reject the call.
+      Confirmed 2026-08-30 by independent review and verified here (`limit: None`). This contradicts
+      metering-prototype/SCOPE_AND_LIMITATIONS.md, which claims unbounded work cannot run for a bounded
+      charge, and it blocks GATE 2. Needs a cursor or bounded page, maximum row and byte counts, and a
+      query limit derived from remaining gas BEFORE execution, plus a test showing an oversized scan
+      stops before materializing the whole result.
+
+- [ ] P1 VERIFY THEN ACT, DEPENDENCY SUPPORT. An independent review reports that cosmwasm-vm 1.5.x
+      reached end of security support on 2025-04-30 and that the supported lines are 2.3.x and 3.0.x.
+      ASSERTED, not verified here, because web access was not used in that session. VERIFY THIS FIRST.
+      If it holds, the storage and provability results remain valid feasibility evidence, since they
+      turn on the shape of the storage interface rather than a patch version, but they cannot carry a
+      current adoption recommendation. Select a supported line and record why, port the storage,
+      querier, write and EVM-guest spikes without weakening their assertions, repeat the source-resolved
+      determinism reading against the new lockfile, and add a dependency-support policy so an expired
+      runtime cannot silently remain the adoption basis.
+
+- [ ] P2, CI DOES NOT RUN THE EVIDENCE. Most spike binaries assert in main and CI only compiles them, so
+      the assertions never execute in continuous integration. Promote every claim-bearing binary into a
+      test or run it as a CI step, since an unrun assertion is not evidence.
+
+- [ ] PROJECT FRAMING, OWNER DECISION. The same review recommends reframing from a recommendation-led
+      project to requirements-led comparative research, separating product goals, architecture
+      invariants, candidate selection, integration design, and implementation assurance, predeclaring
+      pass, fail and reversal criteria for all five gates, and adding a no-general-VM baseline arm. It
+      also observes that the clean-room round supports a broad Wasm architecture family rather than
+      CosmWasm specifically, which is a real gap between what was established and what has been claimed.
+      Full findings in the project review record.
+
   - [ ] GATE 1, DETERMINISM (evaluation dimension 1, goes first). STARTED 2026-08-27, findings in
         docs/GATE1_DETERMINISM.md. Reframed engine-general rather than as a CosmWasm confirmation, since a
         question phrased to be confirmed usually is. Establish what ANY candidate engine must satisfy to

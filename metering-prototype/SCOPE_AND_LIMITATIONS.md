@@ -62,8 +62,13 @@ appear production-ready while it is not.
    layer's responsibility and a separate design question.
 2. A byte-complete production gas schedule. The absolute gas weights are a directional policy
    calibration, not a production schedule. The point demonstrated is that gas TRACKS the real measured
-   cost and that unbounded work cannot run for a bounded charge, not that every input byte is priced
-   at a production-correct weight. Some minor input paths (for example an address or denomination
+   cost, not that every input byte is priced at a production-correct weight.
+   CORRECTED 2026-08-30. This item previously also claimed that unbounded work cannot run for a bounded
+   charge. That claim was false for the range-scan path. `effective_range` builds its GroveDB query with
+   no limit, materializes the full result and the merged overlay, and returns the gas charge only after
+   that work has been done, so the charge is accounting rather than admission control. Tracked as a P1
+   defect. The prototype therefore bounds the CHARGE but not the WORK on that path, and a production
+   implementation needs the limit derived from remaining gas before execution rather than after. Some minor input paths (for example an address or denomination
    string's length, or note-string construction) are folded into base and per-operation charges rather
    than priced individually.
 3. Multi-threaded serializable isolation beyond GroveDB's optimistic transaction. The router's

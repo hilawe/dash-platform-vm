@@ -18,12 +18,13 @@ Four classes.
 
 | ID | Requirement | Source |
 | --- | --- | --- |
-| B1 | Program-written state keeps membership, non-membership, and secondary-index proofs to light clients | The platform's distinguishing property |
+| B1 | NATIVE state keeps membership, non-membership, and ordered secondary-index proofs to light clients, and adding programmability must not weaken that | The platform's distinguishing property. Note this is scoped to native state deliberately. Extending the same guarantee to PROGRAM-written state is P1, a choice, and stating it as binding here would pre-judge that decision |
 | B2 | Execution is identical on every validator for the same input | Consensus. Divergence is a fork, not a bug |
 | B3 | Existing data contracts, documents, identities, groups, and tokens survive, with migration or wrapping permitted | Owner decision 1, binding |
 | B4 | Program effects apply as one atomic batch within a state transition | D16a, verified against the platform's execution path |
 | B5 | Work performed is bounded BEFORE it is performed, not charged after | Consensus liveness. Currently violated on the range-scan path |
 | B6 | Every queued obligation is schedulable, meaning it can eventually be serviced | Currently violated. An item larger than the per-block rate blocks the queue permanently |
+| B7 | Programs can write NATIVE indexed collections through host functions, with the same proofs native data carries | Derived from the P1 decision 2026-08-30. NOT currently satisfied. The planned operation catalog covers identities, groups, and token mint and burn, and has no document or indexed-collection write. Without this the P1 split has nowhere to put data that needs completeness proofs |
 
 B5 and B6 are stated as requirements rather than as defects because they are properties any candidate
 and any implementation must have. The two open defects are instances of failing them.
@@ -32,7 +33,7 @@ and any implementation must have. The two open defects are instances of failing 
 
 | ID | Question | State |
 | --- | --- | --- |
-| P1 | Are ordered range queries required over PROGRAM-private state, or only over native host state? | **OPEN, and decisive.** If only native state needs them, the Move arm becomes live and the candidate set widens materially. Nothing else in the register changes the field this much |
+| P1 | Must a light client be able to verify COMPLETENESS and ABSENCE over program-written state, or only verify records whose keys it already holds? | **DECIDED 2026-08-30 (owner). SPLIT.** Program-private state is point-provable only. Anything requiring completeness or absence proofs is written to NATIVE indexed collections through host functions, so programs supply compute over a data layer that stays native and stays provable. Consequences below. Reworded before deciding, and the earlier wording is kept here because it was the defect: It previously asked whether ordered range queries were required, which put a storage-engine capability forward as a requirement. That is backwards. Ordered iteration is a MECHANISM; the requirement is what a light client must be able to verify. Membership at a known key needs no ordering. Non-membership and completeness do, since absence is proven by exhibiting the adjacent keys that bracket it |
 | P2 | Should float-bearing program code be rejected at deployment regardless of what the engine permits? | **OPEN.** Every determinism source that addressed it recommended forbidding over canonicalizing, on the grounds that forbidding is checked once while canonicalization must be re-established on every backend and every upgrade |
 | P3 | What terminal work may be split across blocks, and what must remain atomic? | **OPEN.** Decides the remedy for B6. Depends on the applications and the rights model |
 | P4 | How much support runway must a candidate line have when integration begins? | **OPEN.** The current leader's evidence sits on an expired line and the stable target has roughly four months |
@@ -61,10 +62,31 @@ and any implementation must have. The two open defects are instances of failing 
 
 None of these may fail a candidate on its own.
 
-## The one that changes the most
+## What the current design assumes about P1
 
-P1 deserves separate emphasis. The engine comparison currently turns on ordered secondary-index queries
-over program state, and that single criterion is what removes the Move arm. If it applies only to
-native host state, the comparison must be re-run rather than adjusted. It should be decided before more
-evidence is gathered against the current framing, because gathering evidence under a criterion that may
-not apply is the expensive kind of wasted work.
+Recorded so the decision is made deliberately rather than inherited. DESIGN.md item 3 promises program
+state carries "the same membership and non-membership proofs as native state", and the design treats a
+secondary index as an APPLICATION PATTERN built by programs out of ordered keys rather than as a native
+primitive. So the current answer to P1 is the strongest one, and ordered iteration is load-bearing for
+program state as a consequence of that choice.
+
+That choice is a design decision from the frozen v12, not a binding platform property, which is why it
+sits here as policy rather than in the binding table.
+
+## What the P1 decision changes
+
+Three consequences, and the third is a cost rather than a benefit.
+
+The engine screen must be RE-RUN rather than adjusted. Its first filter required an engine's storage
+interface to support ordered range iteration, because program state was assumed to need completeness
+proofs. That is no longer required of the engine. Any candidate whose storage is an authenticated
+key-value store now clears that filter, which is what the comparison had used to remove MoveVM.
+
+A new requirement appears that nothing currently satisfies, recorded as B7. If completeness-bearing data
+lives in native collections, programs must be able to write them, and the operation catalog has no such
+call today. This is now on the critical path for the chosen direction rather than a later nicety.
+
+The cost is expressiveness. Native collections carry contract-defined schemas and index definitions, so
+a program wanting an index shape the native layer cannot express has nowhere to put it. That limit
+should be tested against real application shapes (H1, H4) rather than assumed tolerable, and it is the
+condition most likely to reopen this decision.

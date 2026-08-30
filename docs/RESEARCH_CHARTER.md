@@ -42,7 +42,7 @@ Four arms, kept deliberately small. Each exists to test something the others can
 | --- | --- | --- |
 | CosmWasm on a supported line | The current leader, ported off the expired 1.5.x line | Most evidence exists here, and the storage fit is demonstrated |
 | Strict integer-only interpreted Wasm | A reference implementation that forbids floats outright and interprets rather than compiles | Isolates how much of the determinism difficulty is inherent to WebAssembly versus specific to a compiling runtime |
-| Move, or a concrete Move framework | Conditional arm | Only meaningful if ordered range queries over PROGRAM-private state turn out not to be required. That question is open and is the single input that decides this arm |
+| Move, or a concrete Move framework | **LIVE as of 2026-08-30** | Its condition was the P1 question, now decided as the split, so the storage objection that removed it no longer applies. Its remaining obstacles are real but weaker: adopting the Aptos or Sui framework rather than a neutral VM, no request-and-resolve model for asynchronous native capabilities, and the Ethereum-guest result not transferring |
 | Narrow native modules, no general VM | The baseline | The honest alternative to adding programmability at all. Without it, every comparison is between ways of doing the thing rather than whether to do it |
 
 The baseline arm is not a formality. If the applications Platform actually wants can be served by a

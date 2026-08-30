@@ -15,7 +15,9 @@ attached.
 | D-01 | CosmWasm is the leading candidate execution engine | TESTING | Storage fit execution-produced; two gates fail, three inconclusive | Any gate reaching a settled fail, or another candidate passing more gates |
 | D-02 | The EVM is not viable as a BASE layer | ACCEPTED | Storage model is structurally incompatible with the provability requirement, repository-resolved | A change to the provability requirement itself |
 | D-03 | Ethereum compatibility is reachable as a GUEST | ACCEPTED | Execution-produced, interpreter as a contract with writes landing in GroveDB and proving | None foreseen |
-| D-04 | MoveVM does not clear the storage requirement | TESTING | Asserted only, never run against GroveDB | Requirements register P1. If ordered range queries are not required over program-private state, this must be re-run rather than adjusted |
+| D-04 | MoveVM does not clear the storage requirement | **REOPENED 2026-08-30** | The finding rested on ordered secondary-index queries over program state, which the P1 decision no longer requires of the engine. The screen must be re-run, not adjusted | Resolved by re-running the screen under the P1 split |
+| D-14 | P1 split. Program-private state is point-provable; completeness-bearing data goes to native indexed collections through host functions | ACCEPTED (owner, 2026-08-30) | Decided on the property rather than the mechanism. Membership at a known key needs no ordering; completeness and absence do | Application shapes showing the native layer cannot express an index a program needs (H1, H4) |
+| D-15 | A host operation for writing native indexed collections | PROPOSED | Derived from D-14 and recorded as B7. Nothing satisfies it today; the catalog covers identities, groups, and token mint and burn only | If D-14 reverses |
 | D-05 | Adopt rather than build a bespoke VM | PROPOSED | The comparison assumed the burden lay on the build arm, which is premature while the gates are unresolved | Gate results, or the baseline arm proving sufficient |
 | D-06 | Durable obligations are permanent and priced, no finite horizon | ACCEPTED | Owner decision 2026-08-08, grounded in the platform's own production model | A change to how Platform funds durable state |
 | D-07 | Program effects apply as one atomic batch | ACCEPTED | Verified against the platform's execution path | Upstream change to the batch apply path |
@@ -39,6 +41,8 @@ requires this annotation, which is why it appears rather than being left implici
 | S-03 | CosmWasm achieves determinism partly through the absence of floating point | Gate 1 findings | False. Floats are permitted and determinism comes from NaN canonicalization in the compiler |
 | S-04 | The fan-out-64 terminalization can be serviced across blocks | D-12 | The queue has no partial-progress mechanism, so an oversized item is never drained |
 | S-05 | Unbounded work cannot run for a bounded charge | D-13 | False on the range-scan path |
+| S-06 | Program state carries the same membership and non-membership proofs as native state | D-14 | DESIGN.md item 3's promise. Superseded as a CURRENT-FACING commitment by the P1 split. The frozen design still records it, which is what a frozen historical record is for |
+| S-07 | An engine must support ordered range iteration over program state to be a candidate | D-14 | Screen filter 1. It promoted a storage-engine capability to a selection criterion, which put the mechanism before the property |
 
 RETIRED-CLAIM-QUOTED, covering the lower rows of the table above as well as the upper ones, since the
 gate looks within a fixed window rather than at the whole section.

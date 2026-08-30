@@ -5,6 +5,28 @@ recommended direction in `docs/EXECUTION_ENGINE_ADOPT_VS_BUILD.md` compares with
 worth more than a one-engine answer, so this note screens the field of candidate engines against the
 recorded requirements first, then runs the head-to-head that survives the screen.
 
+## REOPENED 2026-08-30. Read this first
+
+The screen below is superseded in its conclusion and retained for its reasoning. CORRECTED.
+
+Its first filter required a candidate engine's storage interface to support ordered range iteration,
+on the assumption that program-written state must carry completeness and non-membership proofs. That
+assumption was an owner choice rather than a platform property, and it has now been decided the other
+way (requirements register P1, decision D-14). Program-private state is point-provable only, and data
+needing completeness proofs goes to native indexed collections through host functions.
+
+So the criterion that removed MoveVM no longer applies to the engine. The screen must be RE-RUN, not
+edited, because a filter that changes changes every row beneath it. Until that happens, treat the
+verdict below as the answer to a question no longer being asked, and the analysis of each engine's
+storage model as still accurate on its own terms.
+
+What survives unchanged. The EVM's unsuitability as a base layer, which rests on its storage model
+rather than on this filter. The Ethereum-as-guest result. The determinism comparison, which the gate 1
+findings have since moved further in Move's favour rather than against it.
+
+What is now open. Whether MoveVM clears the screen, and therefore whether the head-to-head below
+reaches the same conclusion.
+
 Evidence grades follow the project convention. Every claim about CosmWasm and GroveDB below is
 EXECUTION-PRODUCED or REPOSITORY-RESOLVED and traceable to the spikes. Every claim about MoveVM, PolkaVM,
 the Solana bytecode format, and the rest is ASSERTED, meaning stated from knowledge of an external system

@@ -10,6 +10,21 @@ This is exploratory research by [@hilawe](https://github.com/hilawe). It is not 
 not a Dash Improvement Proposal, and not an official position of the Dash project. Nothing here is
 built into a shipping product.
 
+## The control package
+
+Four short documents govern the active research. Read these before the older material, because they say
+what is settled and what is not.
+
+- **[docs/RESEARCH_CHARTER.md](docs/RESEARCH_CHARTER.md)** states the position, that CosmWasm is the
+  leading candidate and may lose, and names the four candidate arms including a no-general-VM baseline.
+- **[docs/REQUIREMENTS_REGISTER.md](docs/REQUIREMENTS_REGISTER.md)** separates binding platform
+  properties from owner policy choices, workload guesses, and preferences.
+- **[docs/GATE_SPECIFICATION.md](docs/GATE_SPECIFICATION.md)** gives each gate a candidate-neutral
+  question with pass, fail, inconclusive, evidence, and reversal declared in advance. Two gates
+  currently FAIL and three are inconclusive. None passes.
+- **[docs/DECISION_REGISTER.md](docs/DECISION_REGISTER.md)** tracks each decision's state, and lists
+  what has been superseded and by what.
+
 ## Start here
 
 - **[docs/PLAIN_EXPLAINER.md](docs/PLAIN_EXPLAINER.md)** is the plain-language walkthrough. It assumes

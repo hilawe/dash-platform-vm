@@ -28,9 +28,9 @@ wasmer-compiler-singlepass 4.2.2, and wasmparser 0.95 as re-exported by wasmer.
 | Reference types | Rejected at both layers (`parsed_wasm.rs:32`, `gatekeeper.rs:64`) | REPOSITORY-RESOLVED |
 | Exception handling | Rejected at both layers (`parsed_wasm.rs:38`, `gatekeeper.rs:65`) | REPOSITORY-RESOLVED |
 | Floating point | NOT rejected. See below. | REPOSITORY-RESOLVED |
-| NaN bit patterns | Canonicalized by the singlepass compiler, on by default (`singlepass/src/config.rs:21`) | REPOSITORY-RESOLVED |
+| NaN bit patterns | Canonicalized. On by default in singlepass (`config.rs:21`) AND explicitly enabled by cosmwasm-vm (`engine.rs`, `compiler.canonicalize_nans(true)`) | REPOSITORY-RESOLVED |
 | Metering boundary timing | Gas points injected as a compiler middleware (`engine.rs:65`) | REPOSITORY-RESOLVED |
-| Compiler choice | Singlepass, fixed rather than configurable (`engine.rs:61`) | REPOSITORY-RESOLVED |
+| Compiler choice | NOT fixed. Singlepass by default, Cranelift when the `cranelift` cargo feature is set (`engine.rs`, `#[cfg(feature = "cranelift")]`). See below. | REPOSITORY-RESOLVED |
 | Compiler and VM version pinning across validators | Not a code property. Remains a governance question, gate 5. | OPEN |
 | Iteration order over program state | Demonstrated in the storage spikes, ordered and proven | EXECUTION-PRODUCED |
 
@@ -50,9 +50,19 @@ decision by the CosmWasm authors, not an oversight.
 Determinism for floats is instead obtained downstream, in the compiler. Wasm floating-point arithmetic
 is fully specified except for NaN payload bits, and the singlepass compiler canonicalizes NaNs with
 `enable_nan_canonicalization` defaulting to true, with architecture support present for both x86-64 and
-aarch64. The engine builder fixes singlepass as the compiler and pushes the Gatekeeper and the metering
-middleware onto it (`wasm_backend/engine.rs:61` through `65`), so the canonicalization is in force on
-the path a contract actually takes.
+aarch64. The engine builder pushes the Gatekeeper and the metering middleware onto the compiler and calls
+`canonicalize_nans(true)` explicitly rather than relying on the default, so the canonicalization is in
+force on the path a contract actually takes.
+
+The compiler is selected at BUILD TIME, not fixed. An earlier draft of this note said singlepass was
+fixed rather than configurable. Re-reading `make_compiling_engine` disproved that. The function carries
+a `#[cfg(feature = "cranelift")]` branch selecting Cranelift and a `#[cfg(not(feature = "cranelift"))]`
+branch selecting singlepass, so which compiler a validator runs is a property of how its binary was
+compiled. Two validators running the same cosmwasm-vm version with different cargo features would run
+different compilers over the same contract. Both canonicalize NaNs here, so the float story survives,
+but the general hazard does not depend on floats. This makes the version-pinning duty in gate 5 wider
+than pinning version numbers, since it has to pin build configuration as well, and build configuration
+is considerably easier to get wrong quietly.
 
 Two smaller observations came out of the same reading, both worth carrying into the design round.
 
@@ -83,6 +93,42 @@ engines and Move still loses there. It does mean the determinism argument for Co
 in terms of compiler configuration and version pinning rather than in terms of absent operations, and
 that pinning is exactly gate 5.
 
+## The design round, first returned instrument
+
+The clean-room round is dispatched. Its packet asks for the divergence enumeration and the evidence
+standard FIRST, committed before the reader sees any of this system's configuration, and then presents
+the configuration as raw excerpts with no interpretation attached. The packet does not contain the
+findings above, so a reader reaching them reaches them independently.
+
+One instrument has returned so far, reasoning from the packet alone with no repository access. It is
+one source, so it is one voice rather than corroboration in the plural sense, and the remaining
+instruments have not run.
+
+It independently reached all three findings above. It identified that the Gatekeeper default permits
+floats while the adjacent documentation claims otherwise, that `deterministic_only` "may compile to no
+check", and that the compiler is selected "according to a compile-time feature" and is therefore a
+build-configuration divergence surface rather than a fixed property.
+
+One caveat on weight. Part A4 of the packet asks the reader to enumerate failure shapes where a control
+is present but inert, before showing any code. That primes the category, so locating the
+`deterministic_only` instance is evidence of detection rather than of independently generating the
+category. The float and compiler findings were not primed in the same way.
+
+It also raised two divergence sources this note had not recorded, both from the same excerpts.
+
+- **The metering limit is constructed as zero.** `make_compiling_engine` builds the metering middleware
+  with `gas_limit = 0`. That is very likely a placeholder replaced per call at instantiation, but the
+  excerpt does not show it being replaced, and the reviewer's point stands as an evidence question. If
+  it were not replaced with a deterministic per-call limit, or if host work stayed materially
+  unmetered, the resource bound would not hold. This needs checking against the instantiation path.
+- **The memory limit is optional.** The function takes `memory_limit: Option<Size>`, and the limiting
+  tunables are applied only when a limit is supplied. A host passing nothing gets no bound, which makes
+  memory growth a property of the host's configuration rather than of the engine. Two validators
+  configured differently would diverge on any program whose behaviour depends on allocation success.
+
+The second item corroborates a gap this note had already flagged as unread, namely
+`wasm_backend/limiting_tunables.rs`, and raises its priority.
+
 ## What remains open
 
 The reading above settles which controls exist. It does not settle whether they are sufficient, and
@@ -92,9 +138,9 @@ plan calls for.
 1. The clean-room design round on determinism, run against the engine-general framing at the top of
    this note rather than as a CosmWasm confirmation. Independent sources, no sight of this note,
    committed before comparison.
-2. Whether NaN canonicalization plus fixed singlepass is a sufficient float story for a consensus
-   system, or whether program code should be rejected for containing floats at deployment regardless of
-   what the VM permits. This is a Dash-side policy question that CosmWasm leaves open.
+2. Whether NaN canonicalization plus a pinned compiler build is a sufficient float story for a
+   consensus system, or whether program code should be rejected for containing floats at deployment
+   regardless of what the VM permits. This is a Dash-side policy question that CosmWasm leaves open.
 3. Non-determinism sources outside the Wasm module itself, meaning host-function return values, gas
    exhaustion timing, and memory growth limits. The limiting tunables in
    `wasm_backend/limiting_tunables.rs` were not read for this note and should be.

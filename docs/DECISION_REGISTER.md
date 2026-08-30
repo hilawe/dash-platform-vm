@@ -28,6 +28,12 @@ attached.
 | D-12 | Terminal work must be resumable, with indivisible steps bounded by a guaranteed minimum allocation | PROPOSED | Remedy for the schedulability defect. Not yet designed or implemented | Requirements register P3, and the applications that decide what may be split |
 | D-13 | Bounded lazy paging for range scans, designed against the target line and implemented once | PROPOSED | Remedy for the unbounded-scan defect. The obvious fix does not work, since the storage interface never receives remaining gas | The target line's interface, if it exposes a remaining-gas hook |
 
+| D-16 | Runway policy. A candidate line needs two Dash upgrade cycles of remaining support, about 180 days, when integration begins | ACCEPTED (owner, 2026-08-30) | Derived from Dash's own upgrade cadence rather than chosen | A change in Dash's release cadence |
+| D-17 | Gates are re-run per major engine line by default; carry-forward requires written justification | ACCEPTED (owner, 2026-08-30) | Gate 1's findings were tied to an exact dependency graph and feature matrix | None foreseen |
+| D-18 | Runtime version is selected by activated protocol version. Several may exist in a binary, exactly one executes at a height | ACCEPTED (owner, 2026-08-30) | Two runtimes at one height is a fork by construction | None foreseen. Sub-question open on contract pinning versus re-validation at upgrade |
+| D-19 | An expired line keeps its feasibility evidence, loses its version-bound gate results, and may not be called an integration target | ACCEPTED (owner, 2026-08-30) | Enforced by tools/check_dependency_support.sh rather than by remembering | None foreseen |
+| D-20 | 3.0.x is a RESEARCH target, not an integration target | ACCEPTED (owner, 2026-08-30) | Follows from D-16. Roughly four months of runway against a 180-day policy | 3.1.x stabilizing with adequate runway |
+
 ## Superseded
 
 RETIRED-CLAIM-QUOTED. The rows below restate claims this project no longer holds, in order to record

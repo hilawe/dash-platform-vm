@@ -47,26 +47,46 @@ what is settled and what is not.
 
 ## How engines are evaluated
 
-No engine is assumed here. Candidates are screened against Platform's own requirements, and the
-criterion that does most of the work is provability. Dash Platform's distinguishing property is that
-state carries membership, non-membership, and secondary-index proofs to light clients, so an engine
-whose storage model cannot preserve that is not a candidate however good it is otherwise. Determinism
-across validators, a worst-case block bound that holds under adversarial load, and the ability to
-reach Dash-native capabilities are the other standing criteria.
+No engine is assumed here. Candidates are screened against Platform's own requirements. Dash Platform's
+distinguishing property is that state carries membership, non-membership, and ordered secondary-index
+proofs to light clients, and adding programmability must not weaken that for NATIVE state. Determinism
+across validators, a worst-case block bound that holds under adversarial load, and reaching Dash-native
+capabilities are the other standing criteria.
 
-Applying that screen has produced results worth stating plainly, each at the evidence grade below.
-The Ethereum Virtual Machine does not survive it as a BASE layer, because its fixed 256-bit-slot
-storage model presumes a Merkle Patricia trie, though it is reachable as a GUEST, which is
-demonstrated here by a minimal Ethereum interpreter running as a contract whose storage writes land in
-GroveDB and prove. CosmWasm does survive it, because its storage interface assumes an authenticated,
-lexicographically ordered byte-key store with range iteration and proofs, which is the shape GroveDB
-already has, and that substitution is demonstrated by running code at every layer. MoveVM clears the
-screen too and beats CosmWasm on determinism, while losing on ordered indexed provability.
+The screen is currently REOPENED and its earlier verdict should not be relied on. Its first filter
+required a candidate engine's own storage interface to support ordered range iteration, on the
+assumption that program-written state must carry completeness proofs. That was an owner choice rather
+than a platform property, and it has been decided the other way. Program-private state is point-provable
+only, and data needing completeness or absence proofs goes to native indexed collections through host
+functions. A filter that changes changes every row beneath it, so the comparison is being re-run rather
+than edited.
 
-Those are screen outcomes, not a settled choice. The decision document does recommend a direction, and
-it makes that recommendation conditional on five gates, none of which has closed yet. Determinism
-across validators is the first of them and the assumption whose failure would end the approach. Read
-the recommendation with its conditions attached rather than on its own.
+What survives that change, each at the evidence grade below. The Ethereum Virtual Machine is not viable
+as a BASE layer, which rests on its storage model rather than on the changed filter, though it is
+reachable as a GUEST, demonstrated here by a minimal Ethereum interpreter running as a contract whose
+writes land in GroveDB and prove. CosmWasm's storage interface fits GroveDB, demonstrated by running
+code at every layer.
+
+What is open. Whether MoveVM now clears the screen, since the criterion that removed it no longer
+applies to the engine. No gate passes today, two fail, and the recommendation should be read with its
+conditions attached rather than on its own.
+
+## Dependency support policy
+
+A consensus runtime cannot be patched quickly, because a fix to it is a consensus change. The policy
+that follows from that is recorded in the requirements register and enforced rather than remembered.
+
+A candidate line must have at least two Dash upgrade cycles of remaining support, about 180 days, when
+integration begins. Every gate is re-run on a new major line by default, and carrying one forward needs
+a written justification, since gate evidence is tied to an exact dependency graph. A binary may hold
+several runtime versions, but the active one is a function of the activated protocol version, so exactly
+one executes at any height.
+
+The CosmWasm evidence here was produced against 1.5.11, whose security support ended on 2025-04-30, so
+it is feasibility evidence and not a basis for integration. `tools/check_dependency_support.sh` compares
+the recorded support status against what these documents actually say and fails when they disagree. It
+runs in continuous integration on every push, because an expiry date passes on its own while nobody is
+looking.
 
 ## Evidence grades
 

@@ -1,0 +1,12 @@
+# Dependency support status for the execution-engine candidate.
+#
+# Format: crate|pinned version|support line|support ends (YYYY-MM-DD)|source
+#
+# The runway threshold is set by requirements-register P4: a line must have at
+# least two Dash upgrade cycles of remaining support at the moment INTEGRATION
+# begins. At the observed release cadence that is 180 days.
+#
+# Keep the dates current against the upstream schedule. A wrong date here
+# silently weakens the check, which is the one failure mode this file has.
+RUNWAY_DAYS=180
+cosmwasm-vm|1.5.11|1.5.x|2025-04-30|https://github.com/CosmWasm/advisories

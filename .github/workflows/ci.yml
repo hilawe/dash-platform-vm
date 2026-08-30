@@ -11,6 +11,16 @@ env:
   RUST_BACKTRACE: 1
 
 jobs:
+  # The dependency-support policy is checked on every push, not only at export,
+  # because an expiry date passes on its own while nobody is looking.
+  dependency-support:
+    name: dependency support policy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check support status against what the documents say
+        run: bash tools/check_dependency_support.sh .
+
   meter-core:
     name: meter-core (terminal-work meter)
     runs-on: ubuntu-latest

@@ -13,10 +13,16 @@ source. ASSERTED means stated from knowledge of an external system not checked o
 
 ## A version caveat that qualifies everything below
 
-Added 2026-08-30 after an independent review with repository access. Every CosmWasm result in this
-project was produced against cosmwasm-vm 1.5.11. That review reports the 1.5.x line reached end of
-security support on 2025-04-30, with 2.3.x and 3.0.x as the supported lines. That claim is ASSERTED and
-has NOT been verified here, and verifying it is now a blocking task before any adoption decision.
+Added 2026-08-30 after an independent review with repository access, and VERIFIED against the upstream
+support schedule the same day. Every CosmWasm result in this project was produced against cosmwasm-vm
+1.5.11, and the 1.5.x line reached end of security support on 2025-04-30.
+
+Checking the schedule directly sharpened the finding rather than merely confirming it. The published
+support windows are 2.2.x until 2026-05-31, 2.3.x until 2026-09-30, and 3.0.x until 2026-12-31, with
+3.0.9 the latest stable release. Read against today's date, the 2.2.x long-term-support line has
+ALREADY expired and 2.3.x expires within a month, so the only line with meaningful runway is 3.0.x.
+A port to 2.3.x would buy weeks. This makes the target version a decision rather than a default, and
+it makes a dependency-support policy part of the adoption commitment rather than an afterthought.
 
 If it holds, the consequence is specific rather than fatal. The storage and provability results remain
 valid feasibility evidence, since they turn on the shape of the storage interface rather than on a

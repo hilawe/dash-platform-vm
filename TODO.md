@@ -625,10 +625,12 @@ Added after round 4, each one a quantity a v5 rule is denominated in:
       query limit derived from remaining gas BEFORE execution, plus a test showing an oversized scan
       stops before materializing the whole result.
 
-- [ ] P1 VERIFY THEN ACT, DEPENDENCY SUPPORT. An independent review reports that cosmwasm-vm 1.5.x
-      reached end of security support on 2025-04-30 and that the supported lines are 2.3.x and 3.0.x.
-      ASSERTED, not verified here, because web access was not used in that session. VERIFY THIS FIRST.
-      If it holds, the storage and provability results remain valid feasibility evidence, since they
+- [ ] P1 DEPENDENCY SUPPORT, VERIFIED 2026-08-30. cosmwasm-vm 1.5.x reached end of security support on
+      2025-04-30, confirmed against the upstream support schedule. The published windows are 2.2.x until
+      2026-05-31, 2.3.x until 2026-09-30, and 3.0.x until 2026-12-31, latest stable 3.0.9. Read against
+      today, 2.2.x has ALREADY expired and 2.3.x expires within a month, so 3.0.x is the only line with
+      real runway and a port to 2.3.x would buy weeks. Target 3.0.x unless a specific incompatibility
+      argues otherwise, and record the reason either way. The storage and provability results remain valid feasibility evidence, since they
       turn on the shape of the storage interface rather than a patch version, but they cannot carry a
       current adoption recommendation. Select a supported line and record why, port the storage,
       querier, write and EVM-guest spikes without weakening their assertions, repeat the source-resolved

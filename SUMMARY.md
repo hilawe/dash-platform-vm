@@ -179,7 +179,7 @@ therefore shrinks the authorized signer to a price-attestation role. It does not
   `docs/METERING_RESULTS.md` holds the numbers. The two remaining open numbers are not prototype work,
   namely the application-workload mix (a modeling choice that indexes into the measured partition curve)
   and the masternode-hardware survey (which needs real network data).
-- **CosmWasm is the leading candidate for the execution engine, backed by GroveDB, rather than building a bespoke runtime.** All CosmWasm evidence was produced against cosmwasm-vm 1.5.11, whose support status is now in question and must be verified before any decision.
+- **CosmWasm is the leading candidate for the execution engine, backed by GroveDB, rather than building a bespoke runtime.** All CosmWasm evidence was produced against cosmwasm-vm 1.5.11, whose security support ended on 2025-04-30 (verified against the upstream schedule 2026-08-30). The spikes remain valid feasibility evidence but cannot carry a current adoption decision until they are ported to a supported line, which in practice means 3.0.x, since 2.2.x has expired and 2.3.x expires 2026-09-30.
   CosmWasm is the same architecture class the clean-room designs converged on, it shares Platform's
   consensus lineage (Tenderdash is a Tendermint fork), and the whole storage and module-binding path is
   now demonstrated end to end with provability preserved. The decision synthesis

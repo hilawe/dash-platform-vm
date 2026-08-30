@@ -467,9 +467,14 @@ rather than claims.
   it, the safety valve (the flow ceiling from Part 5) held the backlog at zero by throttling intake,
   while a version with the valve removed piled up without bound. That contrast is the valve's value,
   measured rather than asserted. This stage also turned a chosen crew speed into a real throughput
-  figure, and it surfaced a genuine constraint, since one automatic payout fanning out to sixty-four
-  recipients costs more than an entire block's cleanup budget, so it cannot finish in a single block and
-  must be spread across several, which is exactly what the design's spread-the-work mechanism is for. A
+  figure, and it surfaced a genuine DEFECT, though it was not read as one at the time. One automatic payout
+  fanning out to sixty-four recipients costs more than an entire block's cleanup budget. This was
+  originally written up here as a constraint the design anticipates, on the grounds that the work would
+  be spread across several blocks. CORRECTED 2026-08-30. The model has no way to do that. The queue
+  takes one whole item at a time and stops at the first item too big to fit, so an item larger than a
+  block's budget is never processed and blocks everything queued behind it. Spreading the work is what
+  the design intends and what the runnable model does not implement, which is now an open defect with
+  the repair still to be chosen. A
   test that retired a hundred thousand positions at once drained them in exactly the predicted number of
   blocks, with every safety guarantee holding at every step.
 - STAGE E measured the one thing the earlier stages could not, the cost of the actual COMPUTATION a

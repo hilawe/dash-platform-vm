@@ -36,7 +36,7 @@ wasmer-compiler-singlepass 4.2.2, and wasmparser 0.95 as re-exported by wasmer.
 
 ## The correction, stated plainly
 
-Two documents in this repository stated that CosmWasm achieves determinism partly through the ABSENCE
+CORRECTED 2026-08-27. Two documents in this repository stated that CosmWasm achieves determinism partly through the ABSENCE
 of floating point, by rejecting float opcodes during Wasm validation. That is wrong for cosmwasm-vm
 1.5.11, and the corrected account is as follows.
 
@@ -54,7 +54,7 @@ aarch64. The engine builder pushes the Gatekeeper and the metering middleware on
 `canonicalize_nans(true)` explicitly rather than relying on the default, so the canonicalization is in
 force on the path a contract actually takes.
 
-The compiler is selected at BUILD TIME, not fixed. An earlier draft of this note said singlepass was
+The compiler is selected at BUILD TIME, not fixed. CORRECTED. An earlier draft of this note said singlepass was
 fixed rather than configurable. Re-reading `make_compiling_engine` disproved that. The function carries
 a `#[cfg(feature = "cranelift")]` branch selecting Cranelift and a `#[cfg(not(feature = "cranelift"))]`
 branch selecting singlepass, so which compiler a validator runs is a property of how its binary was

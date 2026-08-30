@@ -121,7 +121,9 @@ CosmWasm, the smart-contract framework used across the Cosmos ecosystem. Two fac
 here than the EVM. First, the consensus lineage aligns, because Dash Platform runs on Tenderdash, which
 is a fork of Tendermint (now CometBFT), the same Byzantine-fault-tolerant engine the Cosmos ecosystem is
 built on. Second, and more important, CosmWasm is the same architecture class the clean-room designs
-converged on independently. It is a deterministic, integer-only, gas-metered, sandboxed Wasm runtime
+converged on independently. It is a gas-metered, sandboxed Wasm runtime. It is NOT integer-only. It permits floating-point
+operations and obtains determinism through NaN canonicalization in the compiler instead, which the
+determinism gate established by reading the source, and that claim is CORRECTED here
 whose contracts are written in Rust and reach the chain only through a defined host-function interface.
 In other words, CosmWasm is a mature, audited implementation of the architecture this research specified
 from first principles.
@@ -212,7 +214,8 @@ Concrete next steps, for whoever picks this up:
   signal, not a specification, is what gates the next step.
 - If interest exists, scope a thin end-to-end implementation slice as the evidence a future DIP would
   rest on, and treat EVM compatibility as a separate later question with its own design round.
-- Adopt CosmWasm as the execution engine (the direction the synthesis recommends,
+- Treat CosmWasm as the LEADING CANDIDATE for the execution engine (the direction the synthesis
+  favours, though it is not a decision,
   `docs/EXECUTION_ENGINE_ADOPT_VS_BUILD.md`) rather than build a bespoke runtime, and draw on
   contributors with Cosmos experience. The gating storage question is now answered by running spikes
   (`docs/COSMWASM_STORAGE_ASSESSMENT.md`, favorable), covering both the contract-facing storage over a

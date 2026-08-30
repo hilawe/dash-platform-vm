@@ -27,7 +27,8 @@ built into a shipping product.
   before the designs were compared.
 - **[docs/FORK_OR_INTEGRATE.md](docs/FORK_OR_INTEGRATE.md)** asks whether an engine should be forked
   the way Tendermint became Tenderdash, or integrated through the extension points it already provides.
-- **[DESIGN.md](DESIGN.md)** is the full architecture, version 12, review-complete and frozen.
+- **[DESIGN.md](DESIGN.md)** is the full architecture, version 12, frozen as the reviewed HISTORICAL
+  record. It is not a statement of current conclusions, which remain open.
 
 ## How engines are evaluated
 
@@ -109,6 +110,11 @@ them and no sight of the author's design, which was committed to version control
 independence is auditable. Agreements were treated as forced by the requirements. Disagreements became
 deliberate decisions with reasons recorded.
 
+One limit of that exercise is worth stating, because it bounds what it can be cited for. The
+convergence supports a broad architecture FAMILY, a deterministic metered sandboxed WebAssembly runtime
+reached through host functions. It does not establish that any particular implementation of that family
+is the right one, so it cannot be cited as having selected CosmWasm.
+
 The synthesized architecture then went through twelve adversarial review rounds, and the metering
 prototype through fifteen more. Findings are attributed by independent review source rather than by
 reviewer headcount, because two samples from one source are one voice, not two. A round could close
@@ -125,11 +131,18 @@ output. The adjudications and the findings that survived them are reflected thro
 
 ## Status and license
 
-`DESIGN.md` is at version 12 and frozen. The execution engine remains the open question. A direction
-is recommended in the decision document, subject to five conditions that have not closed, and
-determinism across validators is the one to answer first, because it is the assumption whose failure
-would end that direction. `TODO.md` carries the remaining work, including the outstanding engine
-evaluations.
+`DESIGN.md` is at version 12 and frozen as a historical record rather than as a settled conclusion.
+The execution engine remains open. A direction is recommended in the decision document subject to five
+conditions, none of which has closed.
+
+Two defects are currently open in the prototype and both are recorded rather than pending quietly. A
+range scan performs unbounded work before its gas charge is enforced, so the charge is accounting
+rather than admission control. And a terminal-work item larger than the per-block drain rate is never
+drained and blocks everything behind it, which a published measurement here had misread as a tuning
+result. Separately, all CosmWasm evidence was produced against a release line whose security support
+ended on 2025-04-30, so it is feasibility evidence rather than a basis for a current decision.
+
+`TODO.md` carries the remaining work.
 
 Licensed under Apache-2.0, see [LICENSE](LICENSE). `metering-prototype/cosmwasm-host/testdata/`
 contains `hackatom.wasm`, third-party test data from the CosmWasm project, also Apache-2.0, with its

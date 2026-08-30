@@ -611,8 +611,18 @@ Added after round 4, each one a quantity a v5 rule is denominated in:
       across blocks, which the model cannot do. That claim is now corrected in place.
       OWNER DECISION on the remedy, three named options. Make terminalization resumable with a persisted
       cursor and bounded step cost; or require every object's maximum atomic terminal step to stay at or
-      below the minimum future R; or use a scheduler that can skip an oversized item without starving it
-      or violating rights. Then add an invariant that every queued obligation is schedulable, and test
+      below the minimum future R; or use a scheduler that can skip an oversized item. NOTE the third
+      option alone does NOT solve the oversized item, it only protects the items behind it, and can
+      leave the original obligation stranded indefinitely. An independent review recommended a COMBINED
+      rule instead: make divisible terminal work resumable through a persisted deterministic cursor,
+      require every INDIVISIBLE atomic step to fit a protocol-guaranteed minimum service allocation, and
+      allow deterministic bypass of temporarily unfit items only as a scheduling improvement with an
+      aging or fairness rule. A resumable transition must preserve idempotent processing, rollback
+      safety, immutable recipient and dependency sets, no early release of reserved funding, bounded
+      work per block, exactly one terminal disposition, rights that do not change because another user
+      exited, and safe behaviour if R changes while work is pending. This decision should FOLLOW the
+      framing work, since which terminal actions may be split depends on the expected applications and
+      the rights model. Then add an invariant that every queued obligation is schedulable, and test
       growth, reclassification, policy change, and mass retirement against it.
 
 - [ ] P1 DEFECT, UNBOUNDED SCAN BEFORE CHARGE. cosmwasm-host's effective_range builds a GroveDB
@@ -622,15 +632,29 @@ Added after round 4, each one a quantity a v5 rule is denominated in:
       Confirmed 2026-08-30 by independent review and verified here (`limit: None`). This contradicts
       metering-prototype/SCOPE_AND_LIMITATIONS.md, which claims unbounded work cannot run for a bounded
       charge, and it blocks GATE 2. Needs a cursor or bounded page, maximum row and byte counts, and a
-      query limit derived from remaining gas BEFORE execution, plus a test showing an oversized scan
-      stops before materializing the whole result.
+      bounded work per callback. NOTE the obvious fix does not work as stated. `Storage::scan` never
+      receives the remaining gas, it performs work and then RETURNS a gas figure, so the adapter cannot
+      inspect the budget and size the query from it. An independent review raised this and it is
+      correct. The design instead needs a hard protocol limit on work per storage callback, a lazy or
+      paged GroveDB iterator fetching a bounded page at a time, per-page and per-record charging as the
+      iterator advances, and explicit bounds on rows, key bytes, value bytes, overlay entries examined,
+      and retained iterator memory. A remaining-gas hook only if the target CosmWasm line exposes one
+      safely. The test must show processor work and memory stay bounded, not merely that the result is
+      truncated, and must cover descending scans, overlay tombstones, abandoned iterators, errors, and
+      gas exhaustion. DESIGN THIS AGAINST THE TARGET LINE AND IMPLEMENT ONCE, since fixing the 1.5
+      adapter first is disposable work.
 
 - [ ] P1 DEPENDENCY SUPPORT, VERIFIED 2026-08-30. cosmwasm-vm 1.5.x reached end of security support on
       2025-04-30, confirmed against the upstream support schedule. The published windows are 2.2.x until
       2026-05-31, 2.3.x until 2026-09-30, and 3.0.x until 2026-12-31, latest stable 3.0.9. Read against
-      today, 2.2.x has ALREADY expired and 2.3.x expires within a month, so 3.0.x is the only line with
-      real runway and a port to 2.3.x would buy weeks. Target 3.0.x unless a specific incompatibility
-      argues otherwise, and record the reason either way. The storage and provability results remain valid feasibility evidence, since they
+      today, 2.2.x has ALREADY expired and 2.3.x expires within a month. So 3.0.x is the current stable
+      port target, but it is a BRIDGE rather than a destination, with support to 2026-12-31, roughly four
+      months. 3.1.x is release-candidate only and marked unsuitable for production. Expect a further port
+      once 3.1.x stabilizes, and structure the harness so repeating the port is cheap.
+      DECIDE FIRST, as policy rather than per-port improvisation: how much support runway a candidate
+      must have when integration begins, whether the gates must be repeated for every major line, how
+      quickly Dash must upgrade after an upstream release, whether two runtime versions may coexist
+      during activation, and what happens if the evaluated line expires before the evaluation closes. The storage and provability results remain valid feasibility evidence, since they
       turn on the shape of the storage interface rather than a patch version, but they cannot carry a
       current adoption recommendation. Select a supported line and record why, port the storage,
       querier, write and EVM-guest spikes without weakening their assertions, repeat the source-resolved
@@ -656,7 +680,7 @@ Added after round 4, each one a quantity a v5 rule is denominated in:
         presents as consensus forks.
         DONE so far, at REPOSITORY-RESOLVED grade by reading cosmwasm-vm 1.5.11, wasmer 4.2.2 and
         singlepass 4.2.2. SIMD, threads, bulk memory, reference types and exception handling are each
-        rejected at two layers. Metering is a compiler middleware and singlepass is fixed, not
+        rejected at two layers. Metering is a compiler middleware and the compiler is selected by cargo feature rather than fixed, not
         configurable.
         CORRECTED a claim this repository had published. Floating point is NOT rejected. The Gatekeeper
         middleware ships allow_floats: true by default and the crate tests that a float-bearing contract
@@ -664,10 +688,14 @@ Added after round 4, each one a quantity a v5 rule is denominated in:
         the operation being absent. Two documents were fixed. Also noted, cosmwasm-vm's deterministic_only
         validator flag appears inert, because the wasmparser check behind it is compiled out unless a
         cargo feature wasmer does not select is enabled.
-        REMAINING. Run the clean-room design round against the engine-general framing, decide whether Dash
-        should reject float-bearing program code at deployment regardless of what the VM permits, and read
-        limiting_tunables.rs for the non-Wasm divergence sources (host returns, gas-exhaustion timing,
-        memory growth). The design round is the blocking step, since the packets need dispatching.
+        ROUND RUN 2026-08-27, three independent sources returned, all three reaching the float,
+        inert-flag and compiler-selection findings independently. Results folded into
+        docs/GATE1_DETERMINISM.md.
+        REMAINING. Gate 1 must be RERUN after the port to a supported line, since its findings are tied
+        to the 1.5.11 dependency graph specifically. Decide whether Dash should reject float-bearing
+        program code at deployment regardless of what the VM permits, which every source that addressed
+        it recommended. Read limiting_tunables.rs for the non-Wasm divergence sources. Determine whether
+        the host floating-point control registers are saved and restored around engine entry.
   - [ ] GATE 2, WORST-CASE BLOCK BOUND (dimension 3). Confirm VM execution plus GroveDB writes plus proof
         generation stays inside the ~0.5 s under-load block cadence measured in Phase 0, under adversarial
         load and not just typical load. The metering prototype measured the storage and compute dials

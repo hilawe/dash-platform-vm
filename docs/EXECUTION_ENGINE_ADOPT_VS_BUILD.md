@@ -1,7 +1,9 @@
 # Execution engine, adopt versus build
 
 Dated 2026-08-12. This note is the decision synthesis the CosmWasm and EVM spikes were built to inform.
-DESIGN.md v12 settled the architecture and is review-complete and frozen. The open question it left is
+DESIGN.md v12 is review-complete and frozen as the reviewed HISTORICAL architecture. That freeze records
+what was concluded at the time and does not settle current-facing requirements or conclusions, which
+remain open. The open question it left is
 the execution engine itself, whether to adopt CosmWasm, backed by GroveDB, as the runtime that gives
 Dash Platform general programmability, or to build a bespoke virtual machine (VM). The spikes under
 `metering-prototype/` now supply running evidence for that choice. This note reads that evidence, states the recommendation,
@@ -24,7 +26,7 @@ ALREADY expired and 2.3.x expires within a month, so the only line with meaningf
 A port to 2.3.x would buy weeks. This makes the target version a decision rather than a default, and
 it makes a dependency-support policy part of the adoption commitment rather than an afterthought.
 
-If it holds, the consequence is specific rather than fatal. The storage and provability results remain
+VERIFIED 2026-08-30 against the upstream schedule. It holds. The consequence is specific rather than fatal. The storage and provability results remain
 valid feasibility evidence, since they turn on the shape of the storage interface rather than on a
 patch version. They cannot carry a current adoption recommendation, because interface changes, gas
 rules, host functions, compiler behaviour, and supported toolchains all have to be re-established on a
@@ -38,13 +40,17 @@ CosmWasm is the LEADING CANDIDATE under evaluation as the execution engine, back
 compatibility as a later guest-shape design question rather than a base-layer commitment. Three things
 carry this. The gating provability question is answered with running evidence at every layer. The fit is
 structural rather than lucky, because CosmWasm was designed against exactly the kind of authenticated
-ordered key-value store GroveDB is. And the work that remains is bounded node integration and
-Dash-native bindings, not open-ended VM design, which is the part where consensus forks live.
+ordered key-value store GroveDB is. And the work that remains was characterized as bounded node
+integration and Dash-native bindings. That characterization is now too narrow. Two defects have since
+been found in the prototype itself, the range scan that performs unbounded work before its charge and
+the terminal-work item that can become permanently undrainable, and the evidence base sits on an
+unsupported release line.
 
 Build is justified only if a specific determinism, gas-bound, sandbox, or native-capability requirement
 is shown to be unmeetable within CosmWasm. Note that this framing puts the burden on the build arm,
 which an independent review identified as premature. The gates below have not produced comparable
-evidence across candidates, so 'leading candidate' is the widest claim the evidence currently supports. No such blocker has surfaced in the spikes. Until one does,
+evidence across candidates, so 'leading candidate' is the widest claim the evidence currently supports. No blocker of that kind has surfaced, though the spikes have since produced two defects of their own
+that are open rather than closed. Until a genuine engine-level blocker appears,
 building a new VM would reinvent what CosmWasm already provides (deterministic metering, a contract
 binary interface, a storage abstraction) and take on the largest security surface in the system without
 a demonstrated reason.
@@ -146,7 +152,7 @@ verified answer, not an assurance, before adoption is final.
    execute identically on every validator, and which candidates satisfy it. For CosmWasm the controls
    are the fixed singlepass compiler, gas-metering boundary timing, the Gatekeeper middleware's feature
    rejections, NaN canonicalization, and version pinning of cosmwasm-vm and wasmer across validators.
-   NOTE that an earlier version of this list named the absence of floating point as one of those
+   CORRECTED. An earlier version of this list named the absence of floating point as one of those
    controls, which reading the source disproved. Floats are permitted and NaN canonicalization carries
    the determinism instead, recorded in `docs/GATE1_DETERMINISM.md`. This is the failure mode that
    presents as consensus forks.

@@ -94,7 +94,7 @@ deployment; canonical ordering at the host boundary; metering in the existing cr
 per-block bounds; existing data contracts, tokens, identities, and groups preserved and callable; phased
 governance-gated then permissionless deployment; no new mandatory trusted party; determinism as the
 assumption to validate first; and Rust as the first source language. Convergence of this breadth on a
-wide design space is strong evidence the architecture is requirements-forced rather than one model's
+wide design space is strong evidence the architecture is requirements-influenced rather than one model's
 preference. Phase 0 then found the platform MORE capable than the designs assumed, with richer proof
 shapes
 than expected, a cost unit that is already a multidimensional vector, and worst-case cost estimators

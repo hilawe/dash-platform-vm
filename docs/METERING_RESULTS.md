@@ -160,13 +160,15 @@ is internally consistent and that its ten invariants are individually load-beari
 
 ## Next
 
-Phase C builds the per-class record catalog against the real store and runs each class's full
+Phase C builds the per-class record catalog against the real store, using SYNTHETIC record shapes and
+handwritten lifecycle operations rather than Platform's own types, and runs each class's full
 terminalization, and phase D drives the certified scenarios under synthetic load. The meter core here is
 the arithmetic those phases will exercise with measured, rather than illustrative, vectors.
 
-# Phase C results, per-class terminal-work vectors measured against the real store
+# Phase C results, per-class terminal-work vectors measured against the real store, on synthetic records
 
-Dated 2026-08-11. Phase C builds a minimal native record for each D15 disposition class in a REAL
+Dated 2026-08-11. CLARIFIED 2026-08-30, the STORE is real and the RECORD SHAPES are not. Phase C builds
+a minimal SYNTHETIC record standing in for each D15 disposition class in a REAL
 GroveDB at the frozen candidate (v5.0.0, 9b98a356) and runs each class's full terminalization, capturing
 the cumulative OperationCost per dimension. This replaces Phase B's illustrative per-class vectors with
 measured ones. The binary is `metering-prototype/src/phase_c.rs`; raw output is
@@ -270,7 +272,7 @@ At R = 40,730 propagation units per block, and the Phase 0 under-load cadence of
 | hook_binding | 5224 | 7 | ~1.21M |
 | lease_exit | 6375 | 6 | ~1.04M |
 
-One real finding, and its interpretation here was WRONG. Corrected 2026-08-30 after an independent
+One real finding, and its interpretation here was WRONG. CORRECTED 2026-08-30 after an independent
 review with repository access.
 
 A single autonomous terminalization at fan-out 64 costs 63,576 propagation units, MORE than the entire

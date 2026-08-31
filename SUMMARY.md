@@ -84,7 +84,11 @@ with the overstatements left visible.
 
 ## What the research established
 
-**The architecture is settled, and it is the same one the requirements force.** Across five independent
+**The architecture converged across independent designs, and that convergence is evidence rather than
+proof.** CORRECTED 2026-08-30. This previously read as settled and requirements-forced. What the
+exercise established is a broad architecture FAMILY, a deterministic metered sandboxed WebAssembly
+runtime reached through host functions. It did not establish that any particular implementation of that
+family is right, and it cannot be cited as having selected one. Across five independent
 designs, twelve core choices converged with no coordination, headlined by a deterministic WebAssembly
 runtime
 embedded in the Layer 2 state transition function; host functions as the program's only interface; all
@@ -180,16 +184,19 @@ therefore shrinks the authorized signer to a price-attestation role. It does not
   namely the application-workload mix (a modeling choice that indexes into the measured partition curve)
   and the masternode-hardware survey (which needs real network data).
 - **CosmWasm is the leading candidate for the execution engine, backed by GroveDB, rather than building a bespoke runtime.** All CosmWasm evidence was produced against cosmwasm-vm 1.5.11, whose security support ended on 2025-04-30 (verified against the upstream schedule 2026-08-30). The spikes remain valid feasibility evidence but cannot carry a current adoption decision until they are ported to a supported line, which in practice means 3.0.x, since 2.2.x has expired and 2.3.x expires 2026-09-30.
-  CosmWasm is the same architecture class the clean-room designs converged on, it shares Platform's
+  CosmWasm is one implementation of the architecture class the clean-room designs converged on, which is
+  weaker than being the class itself, it shares Platform's
   consensus lineage (Tenderdash is a Tendermint fork), and the whole storage and module-binding path is
   now demonstrated end to end with provability preserved. The decision synthesis
   (`docs/EXECUTION_ENGINE_ADOPT_VS_BUILD.md`) sets out the evidence and the five conditions to verify
   before committing, beginning with determinism across validators (the assumption whose failure would
   kill adoption, so it goes first), then the worst-case block bound including proof generation, on-chain
   zero-knowledge verification, asynchronous native capabilities, and version-pinning governance. The
-  remaining engineering is node integration (the production message router, the backend API binding, and
-  the Dash operation catalogs), not VM design, and the effort should draw on contributors with Cosmos
-  experience.
+  remaining work was characterized as node integration (the production message router, the backend API
+  binding, and the Dash operation catalogs). CORRECTED 2026-08-30, that characterization is too narrow.
+  Two defects have since been found in the prototype itself, an unbounded range scan and a terminal-work
+  item that can become permanently undrainable, and the evidence base sits on a support line that
+  expired on 2025-04-30.
 - **Ship dash-dollar on its current actuator design, and treat on-chain math as a later upgrade, not a
   launch dependency.** This recommendation is unchanged from July and the completed review strengthens
   it: the boundary to draw now is the actuator's deterministic math, which maps onto VM host calls when
@@ -208,7 +215,8 @@ therefore shrinks the authorized signer to a price-attestation role. It does not
 
 The design record, its measurement record, the metering prototype, the CosmWasm and EVM spikes with
 their written scope boundary, the adopt-versus-build synthesis, and the complete twelve-round review
-evidence are committed in this repository. The review loop is closed and the record is stable, and the
+evidence are committed in this repository. The review loop is closed. The record is NOT stable and should not be described that way, since
+subsequent work corrected several claims here and reopened the engine screen. The
 prototype has since measured the open cost numbers and confirmed the CosmWasm adoption path with running
 evidence at every layer from a compiled contract to a light-client proof. Nothing here is a commitment
 to build. If a build is ever

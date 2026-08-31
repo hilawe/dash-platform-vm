@@ -43,8 +43,11 @@ and callable rather than reimplemented. Program state lives in the existing auth
 light-client provability that distinguishes Platform survives. Execution is integer-only and metered in
 the existing credit unit against per-block bounds. Deployment is governance-gated first and
 permissionless later, and no new mandatory trusted party is introduced. Every one of those choices was
-reached independently by designs from different sources, which is the main evidence that the
-architecture is forced by the requirements rather than being one designer's preference.
+reached independently by designs from different sources, which is evidence that the architecture is
+strongly suggested by the requirements rather than being one designer's preference. CORRECTED
+2026-08-30, this previously said forced. Independent convergence is evidence that a conclusion is common
+or easily inferred, not that it is correct, and the exercise established an architecture family rather
+than a specific choice.
 
 ## The EVM question, in the right order
 
@@ -120,13 +123,16 @@ execution layer rather than build a bespoke one, and the specific candidate wort
 CosmWasm, the smart-contract framework used across the Cosmos ecosystem. Two facts make it more relevant
 here than the EVM. First, the consensus lineage aligns, because Dash Platform runs on Tenderdash, which
 is a fork of Tendermint (now CometBFT), the same Byzantine-fault-tolerant engine the Cosmos ecosystem is
-built on. Second, and more important, CosmWasm is the same architecture class the clean-room designs
-converged on independently. It is a gas-metered, sandboxed Wasm runtime. It is NOT integer-only. It permits floating-point
-operations and obtains determinism through NaN canonicalization in the compiler instead, which the
-determinism gate established by reading the source, and that claim is CORRECTED here
-whose contracts are written in Rust and reach the chain only through a defined host-function interface.
-In other words, CosmWasm is a mature, audited implementation of the architecture this research specified
-from first principles.
+built on. Second, and more important, CosmWasm is ONE IMPLEMENTATION of the architecture class the clean-room
+designs converged on independently, which is a weaker claim than being that class. It is a gas-metered,
+sandboxed Wasm runtime whose contracts are written in Rust and reach the chain only through a defined
+host-function interface. It is NOT integer-only. It permits floating-point operations and obtains
+determinism through NaN canonicalization in the compiler instead, which the determinism gate established
+by reading the source. Both of those claims are CORRECTED here, since this document previously described
+it as the architecture class itself and as integer-only.
+In other words, CosmWasm is a mature implementation of the same architecture FAMILY this research arrived
+at from first principles. CORRECTED 2026-08-30, this previously called it an implementation of the
+architecture, which claimed more identity between the two than the evidence supports.
 
 That reframes the question. It is not CosmWasm versus the design, because they are largely the same
 design. The question is whether to ADOPT a hardened engine and its contract ecosystem instead of writing
@@ -166,9 +172,9 @@ Several other items would need checking before treating adoption as the plan, an
 The storage question that gated this is now answered with running evidence, and the whole path from a
 compiled contract down to a proof is demonstrated (the storage backend, the host-side backend with a
 cost-to-gas adapter, an end-to-end compiled contract, and the module-binding read and write paths),
-so the comparison has moved from open to decided. The decision synthesis
-(`docs/EXECUTION_ENGINE_ADOPT_VS_BUILD.md`) recommends adopting CosmWasm backed by GroveDB rather than
-building a bespoke runtime, and treating EVM compatibility as a separate later layer on top. It names
+so the comparison has moved from open to evidenced, though NOT to decided. CORRECTED 2026-08-30. The
+decision document treats CosmWasm as the LEADING CANDIDATE backed by GroveDB rather than as a choice,
+and treats EVM compatibility as a separate later layer on top. No gate passes today and two fail. It names
 five conditions to verify before committing, beginning with determinism across validators (the failure
 that would split the record, so it goes first), then the worst-case block bound including proof
 generation, on-chain zero-knowledge verification, asynchronous native capabilities such as the

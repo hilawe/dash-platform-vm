@@ -545,8 +545,11 @@ Added after round 4, each one a quantity a v5 rule is denominated in:
 - [ ] Evaluate CosmWasm as an ADOPT-versus-BUILD option for the execution engine (raised by QE, a Dash
       Platform core developer, 2026-08-11). CosmWasm is more relevant than the EVM for two reasons: the
       consensus lineage aligns (Tenderdash is a Tendermint / CometBFT fork, the Cosmos BFT engine), and
-      CosmWasm is the SAME architecture class the clean-room designs converged on (deterministic,
-      integer-only, gas-metered, sandboxed Wasm, Rust-first, host-function interface). So the question
+      CosmWasm is ONE IMPLEMENTATION of the architecture class the clean-room designs converged on
+      (deterministic, gas-metered, sandboxed Wasm, Rust-first, host-function interface). CORRECTED
+      2026-08-30 on two counts. It previously said CosmWasm WAS that class, which claims more identity
+      than the evidence supports, and it listed integer-only among its properties, which gate 1 disproved
+      by reading the source. So the question
       is not CosmWasm versus the design but whether to ADOPT a hardened engine and its ecosystem instead
       of building a bespoke runtime. The gating question, to answer FIRST, is whether CosmWasm's generic
       key-value storage interface can be backed by GroveDB with light-client provability preserved (more

@@ -33,6 +33,9 @@ what is settled and what is not.
 - **[docs/COMMUNITY_BRIEF.md](docs/COMMUNITY_BRIEF.md)** is the short version for a reader who already
   knows the ecosystem.
 - **[SUMMARY.md](SUMMARY.md)** is the research summary with the findings and recommendations.
+- **[docs/DIRECTION_DECISION_0_METHOD.md](docs/DIRECTION_DECISION_0_METHOD.md)** is the method for the
+  question that comes before the engine question, which is whether general programmability is wanted at
+  all. Method only, no conclusion, committed before any evidence is gathered.
 - **[docs/ENGINE_SCREEN.md](docs/ENGINE_SCREEN.md)** is the CURRENT screen, re-run after the P1
   decision changed its first filter. CosmWasm and MoveVM both clear it.
 - **[docs/B7_FEASIBILITY.md](docs/B7_FEASIBILITY.md)** checks the assumption the current requirement

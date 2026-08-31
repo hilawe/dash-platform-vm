@@ -544,10 +544,11 @@ storage scan that does unbounded work before it is charged for it, and a cleanup
 large to ever be processed and then blocks everything queued behind it. The evidence also sits on a
 software line whose security support ended in April 2025. A second engine, MoveVM, has since cleared the
 same screen and has no evidence against it either way. None of the five conditions has been met and two
-have failed outright. Building a
-bespoke runner would be justified only if some specific need proved unmeetable within CosmWasm, and no
-spike has
-shown one.
+have failed outright. CORRECTED 2026-08-30. This previously said building a bespoke runner would be justified only if some
+need proved unmeetable within CosmWasm. That put the burden of proof on every alternative and let the
+leader win by default. CosmWasm leads on VOLUME OF EVIDENCE, nothing more. Which engine is best, and
+whether to adopt one at all rather than build, are both unresolved, and the second engine that clears
+the same screen has had no work done against it in either direction.
 
 What this is NOT, stated plainly. The spikes are small demonstrations, not a finished integration, and
 connecting CosmWasm to the production node and binding every Dash-native feature is real work. Before

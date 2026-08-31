@@ -118,9 +118,9 @@ not a bolt-on to the base layer.
 ## Adopting an existing Wasm execution layer, and the CosmWasm option
 
 A separate and more promising option than EVM compatibility is to adopt an existing, hardened
-WebAssembly
-execution layer rather than build a bespoke one, and the specific candidate worth evaluating is
-CosmWasm, the smart-contract framework used across the Cosmos ecosystem. Two facts make it more relevant
+WebAssembly execution layer. CORRECTED 2026-08-30, this previously framed that as preferable to building
+a bespoke one, which prejudges a question that is open. Adopting versus building is unresolved. The
+candidate with the most evidence behind it is CosmWasm, the smart-contract framework used across the Cosmos ecosystem. Two facts make it more relevant
 here than the EVM. First, the consensus lineage aligns, because Dash Platform runs on Tenderdash, which
 is a fork of Tendermint (now CometBFT), the same Byzantine-fault-tolerant engine the Cosmos ecosystem is
 built on. Second, and more important, CosmWasm is ONE IMPLEMENTATION of the architecture class the clean-room
@@ -241,10 +241,10 @@ Concrete next steps, for whoever picks this up:
 - Only if the direction survives all that, scope a thin end-to-end implementation slice as the evidence
   a future DIP would rest on, and treat EVM compatibility as a separate later question with its own
   design round.
-- Treat CosmWasm as the LEADING CANDIDATE for the execution engine (the direction the synthesis
-  favours, though it is not a decision,
-  `docs/EXECUTION_ENGINE_ADOPT_VS_BUILD.md`) rather than build a bespoke runtime, and draw on
-  contributors with Cosmos experience. The gating storage question is now answered by running spikes
+- Treat CosmWasm as the candidate with the MOST EVIDENCE behind it rather than as the chosen engine
+  (`docs/EXECUTION_ENGINE_ADOPT_VS_BUILD.md`). CORRECTED 2026-08-30, this previously said to prefer it
+  over building a bespoke runtime, which settles an open question by wording. A second engine clears the
+  same screen with no evidence either way, and whether to adopt or build is undecided. The gating storage question is now answered by running spikes
   (`docs/COSMWASM_STORAGE_ASSESSMENT.md`, favorable), covering both the contract-facing storage over a
   GroveDB subtree with provability confirmed, and the host-side cosmwasm-vm backend with a
   GroveDB-cost-to-gas adapter and iterator management. A compiled contract has now been run

@@ -51,7 +51,7 @@ and any implementation must have. The two open defects are instances of failing 
 | H1 | The application mix that programs will actually serve | Indexes into the measured partition curve. Two open cost numbers depend on it |
 | H2 | Fan-out distributions in real use | The schedulability defect was found at fan-out 64. Whether that is common or pathological changes the remedy |
 | H3 | Masternode hardware profile | Needs real network data. The worst-case block bound is meaningless without it |
-| H4 | That general programmability is wanted at all, rather than a small set of native modules | The largest unexamined assumption in the project. NOW BEING TESTED as Direction Decision 0, whose method is `docs/DIRECTION_DECISION_0_METHOD.md`. Split there into a capability axis and an admission axis, since the single-list framing conflated two independent questions |
+| H4 | That general programmability is wanted at all, rather than a small set of native modules | The largest unexamined assumption in the project. Direction Decision 0 will test it. Its method is `docs/DIRECTION_DECISION_0_METHOD.md`, currently at version 2 and DRAFT pending owner approval, so nothing is being tested yet. Split there into a capability axis and an admission axis, the latter separated into who may add, invoke, and change behavior |
 
 ## Preferences
 

@@ -1,158 +1,207 @@
-# Direction Decision 0, method
+# Direction Decision 0, method, version 2 (DRAFT, awaiting owner approval)
 
-Dated 2026-08-30. This document specifies HOW the direction question will be answered. It deliberately
-reaches no conclusion and contains no application corpus.
+Dated 2026-08-30. Version 2 revises version 1 after review. It specifies HOW the direction question will
+be answered, reaches no conclusion, and contains no application corpus.
 
-The separation is the point. Criteria written after the evidence arrives describe the evidence. So the
-method is committed first, approved by the owner, and only then is the corpus assembled and scored. A
-later reader should be able to check that the criteria predate the answer by reading the commit history.
+STATUS: DRAFT. Not approved. No corpus work begins until the owner approves this document, and the
+approved version is frozen at a named version before anything else proceeds.
+
+The two-freeze sequence is the point. Criteria written after evidence describe the evidence, and an
+evidence set assembled with the options in view selects its own answer. So the method freezes first, the
+corpus freezes second, and only then does mapping to options begin. A later reader should be able to
+verify from the commit history that each freeze preceded the work it constrains.
+
+## What this decides, and what it cannot
+
+CORRECTED from version 1. Version 1 said this asks "what Dash should do" and that "the owner decides
+it". That overstates the authority of an unofficial research project.
+
+This decides what the RESEARCH RECOMMENDS. Whether Dash adopts anything is decided elsewhere, by Dash's
+own governance and its maintainers, and nothing in this repository binds them. The owner's authority
+here is over the recommendation, its weighting, and what the project spends effort on next.
 
 ## Why this is not called a gate
 
 The five gates test whether a candidate engine meets a technical requirement. This question is different
-in kind. It asks what Dash should do, which is partly a product-direction and community-value judgment
-rather than a measurement. Calling it Gate 0 would dress a judgment as a test, and the project has
-already corrected several claims that did exactly that.
-
-It is a DIRECTION DECISION. The owner decides it. The method's job is to make the decision informed,
-reversible, and legible, not to make it automatic.
+in kind. It weighs demand, cost, and risk, which is judgment rather than measurement, and calling it
+Gate 0 would dress a judgment as a test.
 
 ## The question, on two axes
 
-An earlier framing offered four alternatives in one list, which conflated two independent questions.
-Whether a general virtual machine is warranted is about CAPABILITY. Whether programs are deployed freely
-is about ADMISSION. A restricted general VM and a permissionless native catalog are both coherent, and a
-single list cannot express either.
-
 **Axis A, capability. What may be computed under consensus?**
 
-| A1 | No new consensus computation. Platform keeps storing, indexing, proving and settling |
-| A2 | A finite catalog of native operations, extended only by protocol release |
+| A1 | No new consensus computation |
+| A2 | A finite catalog of native operations |
 | A3 | A constrained domain-specific language or policy engine, expressive but bounded by construction |
 | A4 | A general-purpose virtual machine |
 
-**Axis B, admission. Who may introduce new behavior, and how?**
+**Axis B, admission. This is three questions, not one.**
 
-| B-i | Protocol-defined only. New behavior requires a protocol release |
-| B-ii | Governance-approved programs. Deployment exists but is gated |
-| B-iii | Permissionless deployment |
+CORRECTED from version 1, which asked only "who may introduce new behavior". Under that single question
+a permissionless native catalog is incoherent, since A2 extends only by protocol release. Introducing
+new behavior, using existing behavior, and changing behavior are separate permissions.
 
-The cells are not all meaningful. A1 admits only B-i. But A3 with B-ii is a real option nobody has
-costed, and so is A4 with B-ii held permanently rather than as a launch phase.
+| | B1. Who may ADD new behavior | B2. Who may INSTANTIATE or INVOKE existing behavior | B3. Who may UPGRADE or DISABLE it |
+| --- | --- | --- | --- |
+| Options | Protocol release only; governance approval; permissionless | Protocol-restricted; governance-approved callers; permissionless | Protocol release; governance; the deploying party |
 
-## This reopens P8, explicitly
+### Compatibility matrix
 
-P8 currently records the deployment permission model as DECIDED, governance-gated at launch and
-permissionless later. That decision assumed the capability question was already settled in favour of a
-general VM, with admission a rollout detail.
+Not every combination exists. Filled in as constraints, not as preferences.
 
-If axis B is genuinely open, P8 cannot stand as decided. Direction Decision 0 therefore REOPENS P8
-rather than quietly contradicting it, and P8's state changes to reflect that. The specific thing P8
-assumed and that is now in question is whether permissionless deployment is the eventual destination or
-one option among three.
+| Capability | B1 add | B2 invoke | B3 change |
+| --- | --- | --- | --- |
+| A1 | Protocol only, by definition | Not applicable | Protocol only |
+| A2 | Protocol only, by definition. A2 cannot offer permissionless ADD | Any of the three. Permissionless INVOKE of a native catalog is coherent and is a real option | Protocol only |
+| A3 | Any of the three | Any of the three | Any of the three |
+| A4 | Any of the three | Any of the three | Any of the three |
 
-Recording this rather than letting two documents disagree is the whole reason the decision register
-exists.
+The A2 row is the one version 1 could not express. A finite native catalog with permissionless
+invocation is a genuine option and was previously unrepresentable.
 
-## Application selection, predeclared
+## This reopens P8
 
-Applications are the evidence base, so how they are chosen decides the answer. The rules are fixed here.
+P8 recorded deployment as governance-gated at launch and permissionless later. That assumed capability
+was settled in favour of A4 and that admission was a rollout schedule. With capability open and
+admission split three ways, P8 cannot stand as decided. It is reopened explicitly, and re-decided or
+re-affirmed when this concludes.
 
-- **Selection is by SOURCE, not by appeal.** An application enters the corpus because someone asked for
-  it, is building it, or is affected by its absence. It does not enter because it illustrates a point.
-- **Every entry names its source and its evidence grade** from the scale below. Entries that cannot be
-  sourced are excluded rather than downgraded.
-- **The corpus must include applications that ARGUE AGAINST a general VM**, meaning things a finite
-  native catalog serves adequately. A corpus containing only cases that need generality has selected its
-  answer.
-- **No minimum count.** A small corpus is an honest finding about demand, and padding it would destroy
-  the only signal it carries.
+## Corpus discovery, predeclared
 
-## Evidence grades for demand
+CORRECTED from version 1, which specified inclusion rules but not where to look. Without a stated search,
+a small corpus cannot be distinguished from a shallow search.
 
-Separate from the project's existing grades, which describe technical claims. These describe demand.
+**Where.** Dash community forums and governance proposals; Dash Improvement Proposals and their
+discussion; the Dash Core and Platform issue trackers; public developer channels; direct approaches to
+teams known to be building on Dash; and comparable applications on other networks, recorded separately
+as feasibility evidence rather than Dash demand.
 
-| Grade | Meaning |
+**Window.** Requests and activity from the preceding 24 months, plus anything older still actively
+pursued. The cutoff date is recorded when the corpus freezes.
+
+**Deduplication.** One entry per distinct application need. Several requests from one organization are
+ONE entry with the request count recorded, since repetition by a single party is intensity rather than
+breadth.
+
+**Coverage is reported, not assumed.** The corpus records which channels were searched, which were not,
+and what was attempted but returned nothing.
+
+**INSUFFICIENT COVERAGE CANNOT PRODUCE A REJECT OUTCOME.** If the search was thin, the honest result is
+INCONCLUSIVE or DEFER. Absence of evidence is evidence of absence only when the search was adequate, and
+whether it was adequate is a judgment recorded openly rather than assumed by default.
+
+## Corpus composition
+
+CORRECTED from version 1, which required including applications that "argue against" a general VM. That
+classifies entries by the conclusion they support before the corpus is frozen, which is the same defect
+the two-freeze sequence exists to prevent.
+
+The corpus includes sourced applications without regard to which option they favour: existing Platform
+workloads, active projects, requests, and proposals. Entries are characterized, not classified. Mapping
+to A1 through A4 and B1 through B3 happens only AFTER the corpus is frozen.
+
+No minimum count. A small well-searched corpus is an honest finding.
+
+## Evidence dimensions, recorded separately
+
+CORRECTED from version 1, whose single grade scale conflated unrelated facts. A deployed application on
+another network proves feasibility and external demand but says little about Dash demand. A named Dash
+request may be stronger Dash-demand evidence with nothing built.
+
+Four independent dimensions per entry.
+
+| Dimension | Values |
 | --- | --- |
-| **DEPLOYED** | Someone runs this today, on Dash or elsewhere, and the need is observable |
-| **BUILDING** | Active development exists, with code or a funded effort |
-| **REQUESTED** | A named party has asked for it, traceable to a request rather than to inference |
-| **PROPOSED** | It appears in a specification, proposal, or roadmap without a named requester |
-| **HYPOTHETICAL** | Constructed to illustrate. Admissible, but may never carry a decision on its own |
+| **Dash demand provenance** | Named Dash party requesting; Dash party building; Dash community discussion; inferred from adjacent need; none |
+| **Implementation maturity** | Deployed elsewhere; building elsewhere; specified; concept only |
+| **Source independence** | Independent of this project; adjacent; solicited by this project |
+| **Confidence** | High, medium, low, with the uncertainty stated |
 
-The last row is the one that matters. A direction supported only by hypothetical applications is a
-direction supported by imagination, and the method should make that visible rather than let volume
-disguise it.
+Hypothetical applications do NOT enter the corpus. They go to a separate scenario and stress-test
+appendix, used to probe whether an option breaks under load, never to establish demand.
 
-## What is recorded per application
+## Recorded per entry
 
-Each entry records these, because they are the inputs H1, H2 and P3 need, and gathering them once is the
-difference between this exercise informing the rest of the project and being a detour.
+Workload shape and expected frequency. Fan-out. Long-lived obligations. Asynchronous operations and
+whether they must span blocks. Native state accessed. Authority required. And whether new instances
+would require a protocol release, which is the B1 discriminator.
 
-- Workload shape and expected frequency.
-- Fan-out, meaning how many parties or records a single action touches.
-- Long-lived obligations created, if any.
-- Asynchronous operations required, and whether they must span blocks.
-- Native state accessed, and whether read, write, or both.
-- Authority required, meaning whose identity the logic must act under.
-- **Whether new instances of this application would require a protocol release.** This is the axis-B
-  discriminator and it should be answered for every entry.
+## Criteria, vetoes, and weights
 
-## Decision criteria, and who weighs them
+CORRECTED from version 1, which deferred weighting until after the corpus. That is another post-evidence
+degree of freedom.
 
-The criteria are fixed here. The WEIGHTING is the owner's, and that division is deliberate, because a
-method that also fixed the weights would be making the decision rather than informing it.
+**Vetoes, not criteria.** These cannot be outweighed by convenience. An option failing any of them is
+excluded regardless of its score.
 
-- What each option makes possible that the others do not.
-- What trust each option introduces or removes, including any new privileged role.
-- Developer autonomy and composability, meaning whether builders can proceed without the protocol's
-  permission.
-- Security surface, governance burden, upgrade cost, and ongoing operating cost.
+- Consensus safety. Any option that cannot execute identically on every validator is out.
+- The binding platform properties B1 through B7 in the requirements register.
+- Any option requiring a new mandatory trusted party.
+
+**Weighted criteria.** The owner approves weights or a priority ordering BEFORE the corpus is assembled.
+
+- What each option makes possible that others do not.
+- Trust introduced or removed.
+- Developer autonomy and composability.
+- Security surface, governance burden, upgrade and operating cost.
 - Time to first useful capability.
-- Reversibility, meaning how hard each option is to walk back.
+- Reversibility.
 
-## Outcomes
+**Scoring.** Each criterion scored 0 to 4 against stated anchors. UNKNOWN is a permitted value and is
+never silently treated as zero, since a missing measurement is not a bad one. Any option carrying more
+than two UNKNOWNs on weighted criteria cannot be recommended as PURSUE without those being resolved.
 
-Three, declared before scoring.
+**Sensitivity analysis is mandatory.** The result is recomputed across a plausible range of weights. If
+the ordering changes within that range, the finding is that the evidence does not separate the options,
+and it is reported that way rather than as a winner.
 
-**PURSUE.** The corpus shows demand that a finite native catalog cannot serve, at a grade above
-hypothetical, and the costs are judged acceptable. The engine work resumes with its existing gates.
+## The result
 
-**DEFER.** Demand is real but thin, or concentrated in applications a native catalog could serve. The
-execution-layer research pauses, the native-catalog arm is developed instead, and a reversal condition
-is recorded with a date to revisit.
+CORRECTED from version 1, whose three outcomes collapsed the option space, dropped A3 entirely, and
+never mentioned admission.
 
-**REJECT.** The corpus does not support general programmability. The research concludes with that
-finding, which is a genuine result and should be published as one rather than treated as a failure.
+The result states four things.
+
+1. **Capability finding.** A single option from A1 to A4, or an unresolved SET the evidence cannot
+   separate.
+2. **Admission finding.** A compatible position on B1, B2 and B3, constrained by the matrix above.
+3. **Action status.** PURSUE, DEFER, DO NOT PURSUE ON CURRENT EVIDENCE, or INCONCLUSIVE. The third is
+   deliberately distinct from rejection, since evidence can fail to support a direction without
+   establishing that the direction is wrong.
+4. **Confidence, unresolved evidence, and reversal conditions.**
 
 ## Reversal conditions
 
-Recorded now, so that a later change of direction is a decision rather than a drift.
+- A Dash party building or requesting something no lower capability option serves.
+- Absence of programmability becomes a stated cause of loss, traceable to named parties.
+- The chosen option is attempted and its costs prove worse than an alternative.
+- Any PURSUE reverses if its supporting corpus proves to rest mainly on solicited or low-confidence
+  entries.
+- Any DO NOT PURSUE reverses on new sourced demand, and it must be revisited on a recorded date.
 
-- A DEPLOYED or BUILDING application appears that a native catalog cannot serve.
-- Dash's competitive position changes such that absence of programmability becomes a stated cause of
-  loss, traceable to specific parties rather than inferred.
-- The native catalog arm is attempted and its own costs prove worse than the general option.
-- A PURSUE outcome reverses if the corpus that justified it turns out to have been mostly hypothetical.
+## How results inform the rest of the project
 
-## How the results feed the rest of the project
+CORRECTED from version 1, which said the corpus populates H1 and makes it stop being a guess. A
+qualitative corpus INFORMS these. It does not measure them.
 
-Not a by-product. This is a reason to do the exercise even if the direction is never in doubt.
+- **H1**, the application mix, gains sourced candidate shapes. It remains a hypothesis, expressed as
+  ranges weighted by expected use, with source and confidence preserved per estimate.
+- **H2**, fan-out, gains observed or stated per-application figures, again as ranges. The schedulability
+  defect appeared at fan-out 64, and the corpus can say whether that is plausible, not how often it
+  occurs.
+- **P3**, splittable terminal work, gains the rights models real applications need.
+- **P10**, the authority model, gains the authority column.
 
-- **H1**, the application mix, is populated directly by the corpus and stops being a guess.
-- **H2**, fan-out distributions, comes from the per-application fan-out figures, and the schedulability
-  defect was found at a fan-out this corpus would tell us is common or pathological.
-- **P3**, what terminal work may be split across blocks, depends on the rights model of real
-  applications and cannot be decided sensibly without them.
-- **P10**, the authority model, is informed by the authority column, since whose identity programs must
-  act under is an application property before it is a design choice.
+No estimate derived here is recorded without its source, its range, and its confidence.
 
-## Sequence
+## Sequence, with two freezes
 
-1. This method is committed and approved by the owner. No corpus work begins first.
-2. The corpus is assembled against the selection rules, each entry graded and recorded.
-3. The options on both axes are scored against the criteria, with the owner weighting.
-4. An outcome is recorded with its reversal conditions, and P8 is re-decided or re-affirmed explicitly.
-5. H1, H2, P3 and P10 are updated from the corpus.
+1. The owner approves this method, including discovery protocol, evidence dimensions, vetoes, weights,
+   scoring rules, and decision authority.
+2. **FREEZE ONE.** The method is committed at a named version.
+3. The corpus is assembled and characterized, with no evaluation of architectures.
+4. Coverage, independence, duplicates and exclusions are reviewed.
+5. **FREEZE TWO.** The corpus is committed.
+6. Only then are applications mapped to capability and admission options and scored.
 
-Steps 2 onward do not start until step 1 is approved.
+Steps 3 onward do not begin before freeze one. Step 6 does not begin before freeze two.

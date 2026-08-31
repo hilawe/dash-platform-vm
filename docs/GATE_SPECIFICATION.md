@@ -56,7 +56,7 @@ is accounting, not admission control.
 **Reversal.** A change to the cadence target, the workload hypothesis, or the hardware profile.
 
 **Current state.** FAIL. The range-scan path performs unbounded work before its charge is enforced.
-This is the only gate currently at fail rather than inconclusive.
+CORRECTED 2026-08-30, this previously said it was the only gate at fail. Gate 5 also fails.
 
 ---
 
@@ -128,8 +128,9 @@ inputs.
 **Reversal.** Support line expiry, a new upstream release, or a change to the runway policy.
 
 **Current state.** FAIL as things stand, on two counts. The evidence line's security support ended
-2025-04-30, and the compiler is selectable by build feature rather than fixed by consensus. The runway
-policy that would set the threshold is itself an open decision.
+2025-04-30, and the compiler is selectable by build feature rather than fixed by consensus. CORRECTED
+2026-08-30, the runway policy is no longer open. P4 set it at two Dash upgrade cycles, about 180 days,
+which is what makes the current line fail rather than merely lack a threshold.
 
 ---
 

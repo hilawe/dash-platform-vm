@@ -134,8 +134,9 @@ In other words, CosmWasm is a mature implementation of the same architecture FAM
 at from first principles. CORRECTED 2026-08-30, this previously called it an implementation of the
 architecture, which claimed more identity between the two than the evidence supports.
 
-That reframes the question. It is not CosmWasm versus the design, because they are largely the same
-design. The question is whether to ADOPT a hardened engine and its contract ecosystem instead of writing
+That reframes the question. CORRECTED 2026-08-30, this previously said the two are largely the same
+design, which claims more identity than the evidence supports. They share an architecture FAMILY, and a
+family is not a design. The question is whether to ADOPT a hardened engine and its contract ecosystem instead of writing
 a runtime, which could shorten the path to a working system and inherit years of security review and
 tooling. The deciding factor is the same provability constraint that ruled out the EVM, but the answer
 is far more likely to be favorable. CosmWasm's storage interface is a generic key-value abstraction
@@ -179,9 +180,11 @@ five conditions to verify before committing, beginning with determinism across v
 that would split the record, so it goes first), then the worst-case block bound including proof
 generation, on-chain zero-knowledge verification, asynchronous native capabilities such as the
 masternode threshold signature, and pinning the engine version identically across validators. Adoption
-is likely the shorter path, because most of the runtime already exists and is hardened and the remaining
-work is node integration rather than inventing a VM, and the effort should draw on contributors with
-Cosmos experience.
+was argued to be the shorter path because the remaining work is node integration rather than inventing a
+VM. CORRECTED 2026-08-30, that is no longer accurate. Two defects have since been found in the prototype
+itself, an unbounded range scan and a terminal-work item that can become permanently undrainable, and
+the evidence base sits on a line whose support ended on 2025-04-30. The path may still be shorter, but
+not for the reason given, and no gate passes today.
 
 ## On whether this becomes a DIP
 
@@ -236,5 +239,6 @@ Concrete next steps, for whoever picks this up:
   answering a contract's queries against Dash token state in GroveDB) and its write path (a real
   contract
   emitting a transfer that a stand-in router applies to GroveDB, provably) already demonstrated
-  (`docs/COSMWASM_MODULE_BINDINGS.md`); what remains there is the production node router and catalog
-  work.
+  (`docs/COSMWASM_MODULE_BINDINGS.md`). CORRECTED 2026-08-30. What remains is not only the production
+  node router and catalog work. It also includes the two open prototype defects and, under the split,
+  a host operation for writing native indexed collections whose authority model is undesigned.

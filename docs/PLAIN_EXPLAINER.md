@@ -633,8 +633,9 @@ rather than bolted onto the base design as an afterthought.
 - Clean-room design: independent designers working in isolation so their agreements are meaningful.
 - CosmWasm: a mature, widely-used engine for running sandboxed WebAssembly programs, used across a
   family of blockchains. This project's spikes demonstrate it running over Platform's authenticated
-  store with provability preserved, which is why Part 8 recommends adopting it rather than building a
-  runner from scratch.
+  store with provability preserved. CORRECTED 2026-08-30, this previously said that is why the project
+  recommends adopting it. It is the LEADING CANDIDATE under evaluation rather than a choice, and it may
+  lose. No gate has passed and two fail.
 - Cryptographic proof: evidence that relies on hard mathematics rather than on trusting the sender.
 - Custody position: assets a program holds on someone's behalf.
 - Data contract / document: the platform's names for a database schema and a database row.

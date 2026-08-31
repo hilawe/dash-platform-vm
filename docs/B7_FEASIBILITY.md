@@ -15,7 +15,13 @@ against the running image's own label. Nothing here was executed.
 
 ## Verdict
 
-FEASIBLE. The storage mechanism B7 needs already exists at the Drive layer and has every property the
+STORAGE SUBSTRATE REPOSITORY-RESOLVED. HOST OPERATION AND AUTHORITY MODEL UNPROVEN.
+
+CORRECTED 2026-08-30. An earlier version of this line said simply FEASIBLE, which reads as a wider
+claim than the evidence carries, since nothing here was executed and the authority model is undesigned.
+The narrower statement is the accurate one and it is still a useful result.
+
+The storage mechanism B7 needs already exists at the Drive layer and has every property the
 requirement asks for. The real work is not storage mechanics, it is the AUTHORITY MODEL, and that work
 is nameable rather than open-ended.
 

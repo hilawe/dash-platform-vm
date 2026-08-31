@@ -9,11 +9,36 @@ Platform actually does rather than what four designs assumed it does.
 
 ## NEXT STEP, awaiting an owner decision (2026-08-30)
 
-Everything that could invalidate the current candidate set has now been checked. P1 is decided, the
-engine screen is re-run, gate 3 is screened, and B7 is established feasible. Nothing is blocked on
-analysis. What follows is a choice about where to spend effort, recorded here so it is not re-derived.
+CORRECTED 2026-08-30. This block previously opened by saying everything capable of invalidating the
+candidate set had been checked. That was false, and the omission was the largest one available. H4, the
+hypothesis that general programmability is wanted at all rather than a small set of native modules, is
+recorded in the requirements register as the project's LARGEST UNEXAMINED ASSUMPTION, and the charter
+says the no-general-VM baseline could make the whole execution-layer direction wrong. Neither had been
+examined, and neither appeared in the options below. Offering only engine-comparison work while the
+compass question sits unopened is not requirements-led sequencing, which is the thing this project just
+reorganized itself to be.
 
-- [ ] **OPTION A, the MoveVM spike. RECOMMENDED.** Both surviving candidates clear the screen, Move has
+What HAS been checked is narrower and still real. P1 is decided, the engine screen is re-run, gate 3 is
+screened, and B7's storage substrate is repository-resolved. Nothing among the ENGINE questions is
+blocked on analysis.
+
+- [ ] **OPTION ZERO, operationalize H4. NOW RECOMMENDED FIRST.** Define representative real
+      applications and predeclare what evidence would justify a general virtual machine over bounded
+      native modules. Effectively a gate 0, and candidate-neutral. It is recommended ahead of the engine
+      work because every engine option below is an answer to a question this one asks first, and because
+      the requirements register already names it the largest unexamined assumption. It also feeds H1 and
+      H2, which the metering numbers depend on, and P3, since which terminal actions may be split depends
+      on what applications actually do. Cheap relative to the spike, and it can change what the spike is
+      for.
+
+- [ ] **OPTION A, the MoveVM spike. RECOMMENDED ONLY AFTER OPTION ZERO, and it needs rewriting first.**
+      Its specification is superseded in two ways. It still lists an ordered-query experiment in the
+      minimum bar, which P1 removed as an engine requirement. And it does not test what the current
+      screen says is the discriminating uncertainty, which is coexistence, so it should test a Move
+      program reaching native Dash state through a host function under the P10 authority model. Its
+      cross-block item is also written as a SKETCH, and gate 4 requires execution-produced evidence
+      spanning two blocks, so a sketch cannot close it and should not be described as if it could.
+      Original scope follows. Both surviving candidates clear the screen, Move has
       the stronger determinism story, and the ONLY thing making CosmWasm lead is that one has
       execution-produced evidence and the other has none. The charter says CosmWasm may lose, and until
       something is run against Move that sentence is untested. Four items, already specified in
@@ -702,7 +727,9 @@ Added after round 4, each one a quantity a v5 rule is denominated in:
       the assertions never execute in continuous integration. Promote every claim-bearing binary into a
       test or run it as a CI step, since an unrun assertion is not evidence.
 
-- [ ] PROJECT FRAMING, OWNER DECISION. The same review recommends reframing from a recommendation-led
+- [x] DONE 2026-08-30. PROJECT FRAMING. Delivered as the control package: docs/RESEARCH_CHARTER.md,
+      docs/REQUIREMENTS_REGISTER.md, docs/GATE_SPECIFICATION.md, docs/DECISION_REGISTER.md. Kept below
+      as the original request. The same review recommended reframing from a recommendation-led
       project to requirements-led comparative research, separating product goals, architecture
       invariants, candidate selection, integration design, and implementation assurance, predeclaring
       pass, fail and reversal criteria for all five gates, and adding a no-general-VM baseline arm. It
@@ -737,19 +764,26 @@ Added after round 4, each one a quantity a v5 rule is denominated in:
         generation stays inside the ~0.5 s under-load block cadence measured in Phase 0, under adversarial
         load and not just typical load. The metering prototype measured the storage and compute dials
         that feed this.
-  - [ ] GATE 3, SHIELDED / ZERO-KNOWLEDGE COMPATIBILITY (stated first-class goal). Confirm a CosmWasm
+  - [ ] GATE 3, SHIELDED / ZERO-KNOWLEDGE COMPATIBILITY (stated first-class goal). SCREENED 2026-08-30,
+        docs/GATE3_ZK_SCREEN.md. It does NOT discriminate between engines, since every candidate reaches
+        proof verification through a host primitive, so the CosmWasm-specific wording below is stale.
+        Its evidence is engine-independent and can be produced once. Original wording: confirm a CosmWasm
         contract can verify a zero-knowledge proof on-chain within the gas and block bound, whether via a
         precompile or in-Wasm, since gating an action on a proof without revealing its witness is a named
         requirement.
   - [ ] GATE 4, ASYNCHRONOUS NATIVE CAPABILITIES (dimension 5). Confirm the request-now,
         resolve-in-a-later-block pattern maps onto CosmWasm's message and reply model for operations that
         cannot complete synchronously in one block (masternode threshold signatures, bridge operations).
-  - [ ] GATE 5, VERSION-PINNING GOVERNANCE. Decide how the VM and toolchain versions are pinned and
+  - [ ] GATE 5, VERSION-PINNING GOVERNANCE. POLICY DECIDED 2026-08-30 as P4 through P7, so the framing
+        below is stale on the deciding, though the gate itself still FAILS on the expired line and the
+        build-selectable compiler. Original wording: decide how the VM and toolchain versions are pinned and
         upgraded under consensus governance, since a version skew in a deterministic VM is itself a fork,
         and the spike's build constraints (edition-2024, the pre-bulk-memory Rust pin, singlepass) show
         this is a standing operational duty rather than a one-time setup.
 
-- [x] COMPARE the recommended direction (adopt CosmWasm) against alternative execution engines.
+- [x] COMPARE the leading candidate against alternative execution engines. SUPERSEDED by the re-run in
+      docs/ENGINE_SCREEN.md, which admitted MoveVM after the P1 split changed the first filter. The entry
+      below is the original and its MoveVM rejection no longer holds.
       Requested 2026-08-15 by a Dash community member (relayed via @hilawe), naming MoveVM. Screen run
       2026-08-27, written up in docs/EXECUTION_ENGINE_VM_COMPARISON.md. MoveVM is the only mature engine
       outside the incumbent that clears the screen, and it beats CosmWasm on the first-weighted dimension

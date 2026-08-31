@@ -76,8 +76,15 @@ primitive or in-program.
 
 **Reversal.** A change of proof system or of the platform's shielded subsystem.
 
-**Current state.** INCONCLUSIVE. Also the gate that would justify screening the zero-knowledge-native
-engines properly, which the engine comparison deferred rather than answered.
+**Current state.** INCONCLUSIVE, and screened 2026-08-30 in `docs/GATE3_ZK_SCREEN.md`. The mechanism is
+chosen, a bounded metered `verify_proof` host call for governance-registered systems and circuits, so
+what is missing is a running verification with a measured cost rather than a design.
+
+Two notes from that screen. This gate does NOT discriminate between candidates, because every engine
+reaches proof verification through a host primitive and the cost is a property of the host and the proof
+system rather than of the engine. And its evidence is largely engine-independent, so it can be produced
+once and carried, with only the metering binding re-confirmed per engine. That makes it the cheapest of
+the five to close and the only one whose evidence transfers.
 
 ---
 
@@ -132,7 +139,7 @@ policy that would set the threshold is itself an open decision.
 | --- | --- | --- |
 | G1 Determinism | Inconclusive | Controls partly resolved, tied to an expired line, no cross-architecture evidence |
 | G2 Block bound | **Fail** | Unbounded work before charge on the range-scan path |
-| G3 Shielded and zero-knowledge | Inconclusive | Not attempted |
+| G3 Shielded and zero-knowledge | Inconclusive | Mechanism chosen and screened, no measured verification cost yet. Does not discriminate between candidates |
 | G4 Async capabilities | Inconclusive | Not demonstrated |
 | G5 Version governance | **Fail** | Expired support line, build-selectable compiler, runway policy undecided |
 

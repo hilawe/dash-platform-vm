@@ -35,6 +35,9 @@ what is settled and what is not.
 - **[SUMMARY.md](SUMMARY.md)** is the research summary with the findings and recommendations.
 - **[docs/ENGINE_SCREEN.md](docs/ENGINE_SCREEN.md)** is the CURRENT screen, re-run after the P1
   decision changed its first filter. CosmWasm and MoveVM both clear it.
+- **[docs/GATE3_ZK_SCREEN.md](docs/GATE3_ZK_SCREEN.md)** screens the zero-knowledge engines and finds
+  that gate 3 ranks nobody, since every candidate verifies proofs through a host primitive. The engines
+  that PROVE execution answer a different question and are now a control arm rather than a candidate.
 - **[docs/EXECUTION_ENGINE_VM_COMPARISON.md](docs/EXECUTION_ENGINE_VM_COMPARISON.md)** is the earlier
   head-to-head, retained for its per-engine reasoning. Its screen section is superseded.
 - **[docs/EXECUTION_ENGINE_ADOPT_VS_BUILD.md](docs/EXECUTION_ENGINE_ADOPT_VS_BUILD.md)** is the

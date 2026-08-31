@@ -53,7 +53,7 @@ platform.
 | FuelVM | Yes, per-contract key-value | Yes | Yes | Poor, UTXO-centric state model | Fails F4 |
 | PolkaVM | Yes, host-defined | Yes, host-defined | Partly, maturity thin | Neutral | Build arm, watch |
 | Raw Wasm plus Dash host | Yes, by construction | Yes, by construction | No, the integrator writes it | Good | Build arm, already costed |
-| zkVMs (RISC Zero, Cairo, Miden) | Different class | Different class | Yes | Unknown | Still unscreened, see below |
+| zkVMs (RISC Zero, Cairo, Miden) | Not applicable | Not applicable | Dissolves the question | Unknown, likely poor | REMOVED from this screen. Architectural control arm, not an engine row |
 
 Evidence grades are unchanged and matter here. Every CosmWasm row is EXECUTION-PRODUCED or
 REPOSITORY-RESOLVED. Every other row is ASSERTED, meaning reasoned from knowledge of a system not
@@ -102,10 +102,12 @@ Platform's existing state is reached.
 It does not rank the candidates that clear it. CosmWasm leads on evidence, not on merit demonstrated
 against Move, and the gate specification records that no gate passes for it today.
 
-It does not screen the zero-knowledge-native engines. That gap was flagged when the comparison was
-first written and it is still open. Gate 3 makes shielded compatibility a first-class requirement, and
-an engine class built around proving execution deserves a proper screen against it rather than a table
-row saying "different class".
+The zero-knowledge row above is resolved, and not as expected. `docs/GATE3_ZK_SCREEN.md` records that
+listing those engines here was a category error. Gate 3 asks whether a program can verify a proof through
+a host primitive, which every candidate can do identically, so the gate ranks nobody. The engines that
+PROVE execution answer a different question, whether validators should re-execute at all, which is an
+architectural alternative rather than an engine choice. It now sits beside the no-general-VM baseline as
+a control arm.
 
 It does not address the baseline arm. Whether a small set of native modules serves the applications
 Platform actually wants is hypothesis H4, and no engine screen can answer it.

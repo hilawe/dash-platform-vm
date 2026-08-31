@@ -7,6 +7,40 @@ the assumption whose failure kills the design.
 This is exploration, not a commitment to build. Phase 0 exists so the rest is grounded in what Dash
 Platform actually does rather than what four designs assumed it does.
 
+## NEXT STEP, awaiting an owner decision (2026-08-30)
+
+Everything that could invalidate the current candidate set has now been checked. P1 is decided, the
+engine screen is re-run, gate 3 is screened, and B7 is established feasible. Nothing is blocked on
+analysis. What follows is a choice about where to spend effort, recorded here so it is not re-derived.
+
+- [ ] **OPTION A, the MoveVM spike. RECOMMENDED.** Both surviving candidates clear the screen, Move has
+      the stronger determinism story, and the ONLY thing making CosmWasm lead is that one has
+      execution-produced evidence and the other has none. The charter says CosmWasm may lose, and until
+      something is run against Move that sentence is untested. Four items, already specified in
+      docs/EXECUTION_ENGINE_VM_COMPARISON.md: a Move resource resolver over a GroveDB subtree with a
+      resource written by a real compiled module and proven against the live root; an ordered-query
+      demonstration or a recorded finding that there is none; a gas-meter binding deriving Move gas from
+      GroveDB's measured OperationCost so both engines are priced on the same evidence; and a cross-block
+      request-and-resolve sketch for a masternode threshold signature. Items 1 and 3 are the ones that
+      move the comparison. COST: this is the largest single piece of work outstanding. New toolchain, new
+      crates, a resolver written from scratch, and a slow first cold build on this machine, where RocksDB
+      alone took 105 minutes.
+
+- [ ] **OPTION B, decide P2, the float policy.** One answer closes a proposed decision. Every determinism
+      source that addressed it recommended forbidding float-bearing program code at deployment over
+      relying on canonicalization, since forbidding is checked once while canonicalization must be
+      re-established on every backend and every engine upgrade. Cheapest item on the board.
+
+- [ ] **OPTION C, decide P10, the B7 authority model.** Raised by the B7 check. Whose identity does a
+      program write under, and what confines it to document types it should touch. Engine-agnostic, so it
+      must be answered whichever engine wins, and it is better answered before the host operation is
+      built than discovered during it.
+
+Deliberately NOT recommended yet, and why. The range-scan fix (D-13) and the port to a supported line
+(D-10, D-20) both wait until the target line is settled, since building them twice is the avoidable
+mistake. The schedulability remedy (D-12) waits on P3, because which terminal actions may be split
+depends on the applications and the rights model.
+
 ## Owner decisions raised by Phase 0
 
 Three come from `docs/PHASE0_FINDINGS.md`. Each touched a design decision rather than merely leaving

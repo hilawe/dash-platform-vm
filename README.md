@@ -35,6 +35,9 @@ what is settled and what is not.
 - **[SUMMARY.md](SUMMARY.md)** is the research summary with the findings and recommendations.
 - **[docs/ENGINE_SCREEN.md](docs/ENGINE_SCREEN.md)** is the CURRENT screen, re-run after the P1
   decision changed its first filter. CosmWasm and MoveVM both clear it.
+- **[docs/B7_FEASIBILITY.md](docs/B7_FEASIBILITY.md)** checks whether programs can write native indexed
+  collections at all, which is the assumption the current requirement split rests on. They can, and the
+  real cost is the authority model rather than storage.
 - **[docs/GATE3_ZK_SCREEN.md](docs/GATE3_ZK_SCREEN.md)** screens the zero-knowledge engines and finds
   that gate 3 ranks nobody, since every candidate verifies proofs through a host primitive. The engines
   that PROVE execution answer a different question and are now a control arm rather than a candidate.

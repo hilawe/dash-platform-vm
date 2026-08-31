@@ -455,8 +455,9 @@ rather than claims.
   break anything, which revealed that the test was aimed at the wrong hazard. It was corrected, and only
   then did all ten checks pass. A test never watched failing is not yet a test.
 - STAGE C measured what each kind of record really costs to clean up. Every kind of held position (a
-  single owner's balance, an automatic payout, a scheduled task, and so on) was built for real in the
-  storage engine and then fully wound down, measuring the cost at each step. Two results stood out.
+  single owner's balance, an automatic payout, a scheduled task, and so on) was built in the REAL
+  storage engine, using stand-in record shapes rather than Platform's own document types, and then fully
+  wound down, measuring the cost at each step. Two results stood out.
   First, what a record uses when it is created is exactly what its cleanup gives back, to the byte, for
   every kind. That matters because the whole move-out-deposit idea assumes the ending cost is a real,
   recoverable quantity, and the measurement says it is. Second, an automatic payout to many recipients
@@ -531,12 +532,19 @@ To move this from argument to evidence, I built small running spikes, and they w
 Where the next part (Ethereum) was first written as "reachable in principle," this part is "shown by
 running code."
 
-The recommendation, and it is a recommendation rather than a decision, is to adopt CosmWasm, backed by
-Platform's store, as the runner, and to treat Ethereum compatibility as a separate later layer on top.
-Three things carry it. The hardest question, provability, is answered with running evidence. The fit is
-structural, not coincidental. And what remains is wiring CosmWasm to Platform's own features (tokens,
-identities, groups), which is bounded engineering, rather than inventing a virtual machine, which is the
-single largest place a blockchain develops the disagreements that split the shared record. Building a
+CORRECTED 2026-08-30. This section previously recommended adopting CosmWasm and described the remaining
+work as bounded engineering. Both overstate where the research stands.
+
+CosmWasm is the LEADING CANDIDATE, backed by Platform's store, with Ethereum compatibility treated as a
+separate later layer. Two things support that. The hardest question, provability, is answered with
+running evidence. And the fit is structural rather than coincidental.
+
+What remains is NOT merely bounded wiring. Two defects have since been found in the prototype itself, a
+storage scan that does unbounded work before it is charged for it, and a cleanup item that can grow too
+large to ever be processed and then blocks everything queued behind it. The evidence also sits on a
+software line whose security support ended in April 2025. A second engine, MoveVM, has since cleared the
+same screen and has no evidence against it either way. None of the five conditions has been met and two
+have failed outright. Building a
 bespoke runner would be justified only if some specific need proved unmeetable within CosmWasm, and no
 spike has
 shown one.

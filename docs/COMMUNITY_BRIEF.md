@@ -221,8 +221,26 @@ Concrete next steps, for whoever picks this up:
 -  For Core and Platform maintainers, signal whether an execution-layer direction has appetite, since
   that
   signal, not a specification, is what gates the next step.
-- If interest exists, scope a thin end-to-end implementation slice as the evidence a future DIP would
-  rest on, and treat EVM compatibility as a separate later question with its own design round.
+- CORRECTED 2026-08-30. This list previously went straight to scoping an implementation slice, which
+  skipped the question that decides whether any of this is worth building. The order below is the
+  current one.
+- FIRST, answer whether general programmability is wanted at all. The alternatives are no new on-chain
+  computation, a finite catalog of native modules, governance-admitted restricted programmability, and
+  permissionless general programmability. This is a direction decision rather than a technical gate, and
+  the research treats it as the largest unexamined assumption in the project.
+- The engine question is downstream of that. Two candidates currently clear the screen, CosmWasm and
+  MoveVM, and nothing has been run against MoveVM at all. No gate has been passed and two have failed,
+  one on a storage scan that does unbounded work before being charged for it, one on a software line
+  whose security support ended in April 2025.
+- Two smaller decisions are open and do not depend on the engine. Whether program code containing
+  floating-point operations should be refused at deployment, and under whose identity a program writes
+  native records.
+- A known weakness in the evidence itself. Continuous integration runs the test suites but does not
+  execute most of the programs whose output this research cites, so a green badge currently proves less
+  than it appears to.
+- Only if the direction survives all that, scope a thin end-to-end implementation slice as the evidence
+  a future DIP would rest on, and treat EVM compatibility as a separate later question with its own
+  design round.
 - Treat CosmWasm as the LEADING CANDIDATE for the execution engine (the direction the synthesis
   favours, though it is not a decision,
   `docs/EXECUTION_ENGINE_ADOPT_VS_BUILD.md`) rather than build a bespoke runtime, and draw on

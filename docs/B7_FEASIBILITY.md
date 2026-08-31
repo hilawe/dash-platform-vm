@@ -121,8 +121,10 @@ That was not read here and it is ASSERTED.
 
 ## Consequences
 
-B7 moves from unverified to feasible, so the P1 split keeps its landing zone and nothing above it needs
-re-running.
+B7's STORAGE SUBSTRATE moves from unverified to repository-resolved, so the P1 split keeps its landing
+zone and nothing above it needs re-running. The host operation and authority model remain unproven, so
+B7 as a whole is not established. CORRECTED 2026-08-30, this line previously said B7 moves to feasible,
+which contradicted the narrowed verdict at the top of this document.
 
 D-15 becomes a design task with a known shape rather than an open question, and its difficulty is the
 authority model plus the trigger boundary.

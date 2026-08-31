@@ -90,8 +90,11 @@ grade before any spike and EXECUTION-PRODUCED after.
 
 ## What adoption still costs
 
-None of the remaining work is a storage question or a demonstrated soundness hole. It is node
-integration and engineering scope, and it is the real content of the commitment.
+CORRECTED 2026-08-30. This section previously said none of the remaining work is a storage question or
+a demonstrated soundness hole, and described the remainder as node integration. Both are now false. The
+range-scan path performs unbounded work before its charge is enforced, which IS a storage question and a
+demonstrated defect, and B7's host operation and authority model are unproven. What follows is the node
+integration work, which is real but is no longer the whole of it.
 
 - The production message router. A contract's outbound messages (a `CosmosMsg`, for example a bank
   send) are applied by the node after the contract returns. The spike used a stand-in router, and a node

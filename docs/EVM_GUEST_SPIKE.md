@@ -40,7 +40,8 @@ performant EVM. A production EVM guest would need the full opcode set, a real ga
 the
 secp256k1 precompile (secp256k1 is native to Dash), and the JSON-RPC and proof-translation layer for
 Ethereum tooling that the community brief already flags. Those are the known engineering scope of EVM
-compatibility, unchanged by this spike. The recommendation is also unchanged, which is to adopt CosmWasm
+compatibility, unchanged by this spike. CORRECTED 2026-08-30, the direction is also unchanged but it is
+not an adoption decision. CosmWasm is the leading candidate under evaluation
 first and treat EVM compatibility as its own later clean-room design question, now with a running proof
 that the
 guest shape works over GroveDB.

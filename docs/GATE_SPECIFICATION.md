@@ -142,7 +142,7 @@ which is what makes the current line fail rather than merely lack a threshold.
 | G2 Block bound | **Fail** | Unbounded work before charge on the range-scan path |
 | G3 Shielded and zero-knowledge | Inconclusive | Mechanism chosen and screened, no measured verification cost yet. Does not discriminate between candidates |
 | G4 Async capabilities | Inconclusive | Not demonstrated |
-| G5 Version governance | **Fail** | Expired support line, build-selectable compiler, runway policy undecided |
+| G5 Version governance | **Fail** | Expired support line, and a compiler selectable by build feature rather than fixed by consensus. The runway policy is DECIDED (P4), which is what makes this a failure rather than a missing threshold |
 
 Two gates fail and three are inconclusive. No gate passes. That is the accurate current standing for
 the leading candidate, and it is why the charter's position is leading candidate rather than anything

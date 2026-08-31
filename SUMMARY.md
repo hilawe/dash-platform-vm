@@ -217,7 +217,8 @@ The design record, its measurement record, the metering prototype, the CosmWasm 
 their written scope boundary, the adopt-versus-build synthesis, and the complete twelve-round review
 evidence are committed in this repository. The review loop is closed. The record is NOT stable and should not be described that way, since
 subsequent work corrected several claims here and reopened the engine screen. The
-prototype has since measured the open cost numbers and confirmed the CosmWasm adoption path with running
+prototype has since measured the open cost numbers and confirmed CosmWasm's STORAGE AND INTEGRATION
+FEASIBILITY, which is not the same as confirming an adoption path, with running
 evidence at every layer from a compiled contract to a light-client proof. Nothing here is a commitment
 to build. If a build is ever
 undertaken, the record's own evidence rules apply, and no design claim graduates from review-complete to

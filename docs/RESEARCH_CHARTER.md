@@ -42,7 +42,7 @@ Four arms, kept deliberately small. Each exists to test something the others can
 | --- | --- | --- |
 | CosmWasm on a supported line | The current leader, ported off the expired 1.5.x line | Most evidence exists here, and the storage fit is demonstrated |
 | Strict integer-only interpreted Wasm | A reference implementation that forbids floats outright and interprets rather than compiles | Isolates how much of the determinism difficulty is inherent to WebAssembly versus specific to a compiling runtime |
-| Move, or a concrete Move framework | **LIVE as of 2026-08-30** | Its condition was the P1 question, now decided as the split, so the storage objection that removed it no longer applies. Its remaining obstacles are real but weaker: adopting the Aptos or Sui framework rather than a neutral VM, no request-and-resolve model for asynchronous native capabilities, and the Ethereum-guest result not transferring |
+| Move, or a concrete Move framework | **LIVE, and it clears the re-run screen** | The storage objection that removed it is gone under the P1 split, confirmed by the re-run in `docs/ENGINE_SCREEN.md`. It carries the stronger determinism story of the two mature candidates. Its remaining obstacles are coexistence and integration rather than disqualifications: adopting the Aptos or Sui framework brings a state model with it, there is no request-and-resolve pattern for asynchronous capabilities, and the Ethereum-guest result does not transfer. It has NO evidence produced against it, which is now the main thing separating it from the leader |
 | Narrow native modules, no general VM | The baseline | The honest alternative to adding programmability at all. Without it, every comparison is between ways of doing the thing rather than whether to do it |
 
 The baseline arm is not a formality. If the applications Platform actually wants can be served by a
@@ -72,6 +72,7 @@ Four documents, each with one job.
   inconclusive, evidence, and reversal conditions declared in advance.
 - `docs/DECISION_REGISTER.md` tracks each decision's state so that a superseded decision cannot quietly
   keep operating.
+- `docs/ENGINE_SCREEN.md` is the current screen, re-run after the P1 decision changed its first filter.
 
 Predeclaring the thresholds is the point. A threshold written after the evidence arrives is a
 description of the evidence.

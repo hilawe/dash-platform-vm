@@ -33,8 +33,10 @@ what is settled and what is not.
 - **[docs/COMMUNITY_BRIEF.md](docs/COMMUNITY_BRIEF.md)** is the short version for a reader who already
   knows the ecosystem.
 - **[SUMMARY.md](SUMMARY.md)** is the research summary with the findings and recommendations.
-- **[docs/EXECUTION_ENGINE_VM_COMPARISON.md](docs/EXECUTION_ENGINE_VM_COMPARISON.md)** screens the
-  candidate engines, MoveVM and the EVM included, against the requirements.
+- **[docs/ENGINE_SCREEN.md](docs/ENGINE_SCREEN.md)** is the CURRENT screen, re-run after the P1
+  decision changed its first filter. CosmWasm and MoveVM both clear it.
+- **[docs/EXECUTION_ENGINE_VM_COMPARISON.md](docs/EXECUTION_ENGINE_VM_COMPARISON.md)** is the earlier
+  head-to-head, retained for its per-engine reasoning. Its screen section is superseded.
 - **[docs/EXECUTION_ENGINE_ADOPT_VS_BUILD.md](docs/EXECUTION_ENGINE_ADOPT_VS_BUILD.md)** is the
   decision document, which weighs adopting an existing engine against building one and states its
   recommendation together with the five conditions that must close before any choice is committed.
@@ -47,29 +49,29 @@ what is settled and what is not.
 
 ## How engines are evaluated
 
-No engine is assumed here. Candidates are screened against Platform's own requirements. Dash Platform's
-distinguishing property is that state carries membership, non-membership, and ordered secondary-index
-proofs to light clients, and adding programmability must not weaken that for NATIVE state. Determinism
-across validators, a worst-case block bound that holds under adversarial load, and reaching Dash-native
-capabilities are the other standing criteria.
+No engine is assumed here. Candidates are screened against Platform's own requirements, and each filter
+traces to a numbered requirement rather than to a capability the storage engine happens to have. The
+current screen is [docs/ENGINE_SCREEN.md](docs/ENGINE_SCREEN.md), re-run on 2026-08-30.
 
-The screen is currently REOPENED and its earlier verdict should not be relied on. Its first filter
-required a candidate engine's own storage interface to support ordered range iteration, on the
-assumption that program-written state must carry completeness proofs. That was an owner choice rather
-than a platform property, and it has been decided the other way. Program-private state is point-provable
-only, and data needing completeness or absence proofs goes to native indexed collections through host
-functions. A filter that changes changes every row beneath it, so the comparison is being re-run rather
-than edited.
+Four filters. Program state must be provable at a known key. The engine must offer a principled way for
+the host to expose native operations, since that is how programs reach Dash tokens, identities, groups,
+and the native indexed collections that carry completeness proofs. The engine must own its determinism
+story rather than leaving it to the integrator. And it must coexist with existing Platform state instead
+of forcing every native feature through a wrapper.
 
-What survives that change, each at the evidence grade below. The Ethereum Virtual Machine is not viable
-as a BASE layer, which rests on its storage model rather than on the changed filter, though it is
-reachable as a GUEST, demonstrated here by a minimal Ethereum interpreter running as a contract whose
-writes land in GroveDB and prove. CosmWasm's storage interface fits GroveDB, demonstrated by running
-code at every layer.
+The second and fourth filters are the discriminating ones. That is a change. An earlier screen demanded
+that a candidate's own storage interface support ordered range iteration, which turned out to be a
+storage-engine capability promoted to a selection criterion. Once the requirement was restated as what a
+light client must VERIFY, point-provability turned out to be satisfiable by almost any authenticated
+key-value store, so an engine can no longer be removed for the shape of its own storage.
 
-What is open. Whether MoveVM now clears the screen, since the criterion that removed it no longer
-applies to the engine. No gate passes today, two fail, and the recommendation should be read with its
-conditions attached rather than on its own.
+CosmWasm and MoveVM both clear the screen. CosmWasm leads on evidence rather than on demonstrated merit,
+since nothing has been run against Move at all. The Ethereum Virtual Machine's storage objection fell
+with the same filter change, and it is now rejected on coexistence instead, which is a weaker and more
+contestable objection than the one it replaces. Recording that substitution rather than keeping the
+conclusion and quietly swapping its foundation.
+
+No gate passes today, two fail, and any recommendation should be read with its conditions attached.
 
 ## Dependency support policy
 

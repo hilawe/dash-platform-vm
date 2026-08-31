@@ -15,10 +15,10 @@ assumption was an owner choice rather than a platform property, and it has now b
 way (requirements register P1, decision D-14). Program-private state is point-provable only, and data
 needing completeness proofs goes to native indexed collections through host functions.
 
-So the criterion that removed MoveVM no longer applies to the engine. The screen must be RE-RUN, not
-edited, because a filter that changes changes every row beneath it. Until that happens, treat the
-verdict below as the answer to a question no longer being asked, and the analysis of each engine's
-storage model as still accurate on its own terms.
+So the criterion that removed MoveVM no longer applies to the engine. The screen was RE-RUN on
+2026-08-30 and the result is `docs/ENGINE_SCREEN.md`, which supersedes the screen section below. Read
+that for the current verdict. What follows is retained for its per-engine reasoning, which remains
+accurate on its own terms, and for the record of what was concluded under the earlier filter.
 
 What survives unchanged. The EVM's unsuitability as a base layer, which rests on its storage model
 rather than on this filter. The Ethereum-as-guest result. The determinism comparison, which the gate 1

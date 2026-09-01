@@ -35,7 +35,7 @@ what is settled and what is not.
 - **[SUMMARY.md](SUMMARY.md)** is the research summary with the findings and recommendations.
 - **[docs/DIRECTION_DECISION_0_METHOD.md](docs/DIRECTION_DECISION_0_METHOD.md)** is the method for the
   question that comes before the engine question, which is whether general programmability is wanted at
-  all. Version 3 and DRAFT, awaiting approval. Method only, no conclusion, no corpus. It decides what
+  all. Version 4 and DRAFT, awaiting approval. Method only, no conclusion, no corpus. It decides what
   the RESEARCH recommends, not what Dash does, which is decided elsewhere.
 - **[docs/ENGINE_SCREEN.md](docs/ENGINE_SCREEN.md)** is the CURRENT screen, re-run after the P1
   decision changed its first filter. CosmWasm and MoveVM both clear it.

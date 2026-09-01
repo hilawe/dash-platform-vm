@@ -1,195 +1,199 @@
-# Direction Decision 0, method, version 4 (DRAFT, awaiting owner approval)
+# Direction Decision 0, method, version 5 (DRAFT, awaiting owner approval)
 
-Dated 2026-08-30. Version 4 revises version 3 after review. Method only. No conclusion, no corpus.
+Dated 2026-08-30. Version 5 revises version 4 after review. Method only. No conclusion, no corpus.
 
-STATUS: DRAFT. Not approved. No corpus discovery begins until the owner approves this document, its
-weights, its discovery manifest and its sensitivity scenarios, after which all four freeze together as
-FREEZE ONE at a named version.
+STATUS: DRAFT. Not approved. No discovery begins until the owner approves this document, its weights,
+the discovery manifest (`docs/DIRECTION_DECISION_0_MANIFEST.md`) and the sensitivity scenarios. All four
+freeze together as FREEZE ONE.
 
 ## What this decides, and what it cannot
 
-This decides what the RESEARCH RECOMMENDS. Whether Dash adopts anything is decided by Dash's governance
-and maintainers, who are bound by nothing here.
+This decides what the RESEARCH RECOMMENDS. Adoption is decided by Dash's governance and maintainers.
 
-## The evaluation unit is a POLICY PACKAGE
+## Scope: a STATIC TARGET, not a migration
 
-CORRECTED from version 3, which scored capability options A1 to A4 in isolation. That was wrong, because
-trust, security surface, governance burden, reversibility and delivery time all depend on who may add,
-invoke, upgrade and disable behavior. Scoring capability alone would let admission be chosen after
-seeing which capability led, which is the preselection this method exists to prevent.
+CORRECTED from version 4, which noticed that governance-gated-then-permissionless is a TRANSITION
+between two packages but left it unscored, so the packages could not represent it.
 
-The unit is a COMPATIBLE PACKAGE: one capability choice plus explicit admission choices on every
-admission question. Packages are enumerated at freeze one. Adding a package later requires a versioned
-amendment stating why it was missed.
+Direction Decision 0 selects a STATIC TARGET package. It does not select a migration path. Scoring a
+transition requires its trigger, and a defensible trigger depends on the demand evidence this decision
+is meant to produce, so scoring transitions here would use the answer to choose the question.
 
-### Axis A, capability
+Migration is deferred to a separate decision, DD1, which runs only if DD0 returns PURSUE or DEFER. P8 is
+therefore re-decided in two parts: DD0 sets the target, DD1 decides whether it is reached directly or
+through a gated phase.
 
-| A1 | No new consensus computation |
-| A2 | A finite catalog of native operations |
-| A3 | A constrained domain-specific language or policy engine, bounded by construction |
-| A4 | A general-purpose virtual machine |
+If the corpus shows a need that ONLY a transition serves, that is recorded as a finding and DD1 is
+brought forward. It is not scored here.
 
-### Axis B, admission, four questions
+## The six authority actions
 
-CORRECTED from version 3, whose B3 bundled routine upgrades with emergency disable authority. Those can
-belong to different actors, and neither covers the case where nobody holds the power at all.
+CORRECTED from version 4, whose three admission questions bundled distinguishable actions. "Add
+behavior" could mean changing what the runtime can do, publishing a program, or admitting one. "Invoke"
+merged creating an instance with calling it.
 
-| | Options |
-| --- | --- |
-| **B1. Who may ADD new behavior** | Protocol release only; governance approval; permissionless |
-| **B2. Who may INSTANTIATE or INVOKE it** | Protocol-restricted; governance-approved callers; permissionless |
-| **B3a. Who may UPGRADE it routinely** | Protocol release; governance; the deploying party; NOBODY, behavior is immutable once live |
-| **B3b. Who may DISABLE it in an emergency** | Protocol release; governance; the deploying party; NOBODY |
+| | Action | Authority options |
+| --- | --- | --- |
+| **D1** | Runtime or catalog evolution, changing what the engine or catalog can do at all | Protocol release |
+| **D2** | Program or policy admission, publishing new logic to the chain | Protocol; governance; permissionless |
+| **D3** | Instance creation, creating an instance of admitted logic | Protocol; governance; permissionless |
+| **D4** | Invocation, calling an existing instance | Protocol; governance; permissionless |
+| **D5** | Routine upgrade of admitted logic | Protocol; governance; deployer; nobody, immutable |
+| **D6** | Emergency disable | Protocol; governance; deployer; nobody |
 
-B3a and B3b are separate because an immutable program that governance can still halt is a coherent and
-common design, and version 3 could not express it.
+## Package derivation, evidence-independent
 
-### The enumerated package set
+CORRECTED from version 4, which asserted nine packages without saying why those nine. An unexplained
+reduction is a preselection route. The rules below are structural or coherence-based, never based on
+which option looks attractive.
 
-| Package | A | B1 add | B2 invoke | B3a upgrade | B3b emergency |
+**S-1. D1 is always PROTOCOL.** Changing what the runtime or catalog can do is a consensus change under
+every capability option, including A4, where adding a host function is a protocol release. D1 therefore
+DISCRIMINATES NOTHING and is fixed rather than enumerated. Recorded so its absence is not mistaken for
+an oversight.
+
+**S-2. A1 has no programs.** D2 through D6 are NOT APPLICABLE. A1 yields exactly one package.
+
+**S-3. A2 has no programs, only native operations.** D2 is not applicable, since there is nothing to
+admit. D5 is not applicable, since upgrading a native operation IS D1. D3, D4 and D6 remain live.
+
+**S-4. A3 and A4 have programs.** D2 through D6 are all live.
+
+**C-a. openness(D2) must not exceed openness(D4).** Publishing rights looser than calling rights is
+incoherent, since the right to publish what nobody may call is worth nothing. Excludes every class where
+admission is permissionless while invocation is restricted.
+
+**C-b. openness(D3) must not exceed openness(D4).** Same reasoning for instance creation.
+
+**C-c. D6 must be no narrower than D5.** A system whose logic can be upgraded but not halted is
+strictly worse than one where both are possible, at no benefit. Excludes every class pairing a
+deployer-upgradeable design with no emergency authority.
+
+**Dom-1. D3 and D4 collapse where the corpus records no need to separate them.** They are enumerated
+jointly and split only if an entry records different actors for creating versus calling. The per-entry
+field "who must create, invoke, modify or stop an instance" exists to detect exactly that.
+
+**Rep-1. Representative sampling on D2 and D5.** Where a dimension offers three or more values and no
+structural rule separates adjacent ones, the enumeration takes the ENDPOINTS plus the governance middle.
+Intermediate variants are represented by their nearest enumerated neighbour, and any corpus entry that
+distinguishes them triggers a versioned amendment adding the package.
+
+### The derived package set
+
+| Package | Capability | D2 admit | D3 and D4 create and invoke | D5 upgrade | D6 disable |
 | --- | --- | --- | --- | --- | --- |
-| **PKG-1** | A1 | Protocol | Not applicable | Protocol | Protocol |
-| **PKG-2** | A2 | Protocol | Governance-approved callers | Protocol | Protocol |
-| **PKG-3** | A2 | Protocol | Permissionless | Protocol | Protocol |
+| **PKG-1** | A1 | Not applicable | Not applicable | Not applicable | Not applicable |
+| **PKG-2** | A2 | Not applicable | Governance | Not applicable | Governance |
+| **PKG-3** | A2 | Not applicable | Permissionless | Not applicable | Governance |
 | **PKG-4** | A3 | Governance | Permissionless | Nobody, immutable | Governance |
-| **PKG-5** | A3 | Governance | Permissionless | Deploying party | Governance |
-| **PKG-6** | A3 | Permissionless | Permissionless | Deploying party | Governance |
+| **PKG-5** | A3 | Governance | Permissionless | Deployer | Governance |
+| **PKG-6** | A3 | Permissionless | Permissionless | Deployer | Governance |
 | **PKG-7** | A4 | Governance | Permissionless | Nobody, immutable | Governance |
-| **PKG-8** | A4 | Governance | Permissionless | Deploying party | Governance |
-| **PKG-9** | A4 | Permissionless | Permissionless | Deploying party | Governance |
+| **PKG-8** | A4 | Governance | Permissionless | Deployer | Governance |
+| **PKG-9** | A4 | Permissionless | Permissionless | Deployer | Governance |
 
-Nine packages. P8's original position, governance-gated then permissionless, is a TRANSITION between
-PKG-8 and PKG-9 rather than a package, and whether that transition is intended is part of what this
-decides.
+### Why each omitted class is omitted
 
-## This reopens P8
+| Omitted class | Rule |
+| --- | --- |
+| Any package varying D1 | S-1, D1 is protocol under every capability |
+| A1 with any admission choice | S-2, there is nothing to admit or invoke |
+| A2 with a program-admission or routine-upgrade authority | S-3, A2 has no programs and upgrading its operations is D1 |
+| Permissionless admission with restricted invocation | C-a |
+| Permissionless instance creation with restricted invocation | C-b |
+| Deployer-upgradeable with no emergency authority | C-c |
+| Separate D3 and D4 authorities | Dom-1, collapsed until a corpus entry distinguishes them |
+| Protocol-only or deployer-only D2, and protocol-only or governance D5 | Rep-1, represented by the nearest enumerated neighbour |
+| Any transition between packages | Scope, deferred to DD1 |
 
-P8 recorded deployment as governance-gated then permissionless, which assumed capability was settled at
-A4 and admission was a schedule. Both are open. P8 is re-decided when this concludes.
+The package set FREEZES with the method. Adding one later requires a versioned amendment stating why it
+was missed.
 
 ## Veto applicability
 
-Vetoes cannot be traded against weighted criteria. Applicability is conditional on what a package
-actually does, since applying a requirement to a package that does not need it eliminates the package
-for failing to have a property it never claimed.
+Conditional on what a package actually does. Applying a requirement to a package that never encounters
+it eliminates the package for lacking a property it never claimed.
 
 | Requirement | Applies when | PKG-1 | PKG-2, 3 | PKG-4 to 9 |
 | --- | --- | --- | --- | --- |
-| Consensus determinism (B2) | Always | Applies | Applies | Applies |
-| Native state keeps its proofs (B1) | Always | Applies | Applies | Applies |
-| Existing Platform state survives (B3) | Always | Applies | Applies | Applies |
+| Consensus determinism | Always | Applies | Applies | Applies |
+| Native state keeps its proofs | Always | Applies | Applies | Applies |
+| Existing Platform state survives | Always | Applies | Applies | Applies |
 | No new mandatory trusted party | Always | Applies | Applies | Applies |
 | Atomic effect batching (B4) | The package can change state | Not applicable | Applies | Applies |
-| Work bounded before performed (B5) | The package can perform variable-cost work | Not applicable | Applies | Applies |
-| Queued obligations schedulable (B6) | **The design can create queued or deferred obligations** | Not applicable | Applies only if the catalog creates them | Applies only if the design creates them |
-| Programs write native indexed collections (B7) | **The package permits program-private state AND requires native indexed writes** | Not applicable | Not applicable | Applies only to packages meeting both conditions. An A3 policy engine exposing only native operations, with no private state, does not face it |
+| Work bounded before performed (B5) | The package performs variable-cost work | Not applicable | Applies | Applies |
+| Queued obligations schedulable (B6) | The design can create queued or deferred obligations | Not applicable | Only if the catalog creates them | Only if the design creates them |
+| Programs write native indexed collections (B7) | The package permits program-private state AND requires native indexed writes | Not applicable | Not applicable | Only where both hold |
 
-**For PKG-1, the universal requirements mean the EXISTING invariant must not be weakened.** They are not
-a positive pass for capabilities PKG-1 does not provide. A package earns nothing for a requirement it
-never encounters, and the scoring sheet records NOT APPLICABLE distinctly from PASS.
+For PKG-1 the universal requirements mean the EXISTING invariant must not be weakened. NOT APPLICABLE is
+recorded distinctly from PASS. An UNKNOWN on an applicable veto is BLOCKING.
 
-An UNKNOWN on an applicable veto is BLOCKING and is never resolved in the package's favour.
-
-## Discovery manifest, frozen before searching
-
-CORRECTED from version 3, which required the eventual report to disclose sources but did not predeclare
-them. Disclosure after the fact cannot distinguish a planned search from a convenient one.
-
-The manifest is written and frozen BEFORE any searching, and contains:
-
-- The exact repositories, forums, governance records, proposal systems and support channels to be
-  searched, each named individually.
-- The exact search strings, and the date range applied to each source.
-- The outreach selection rule, meaning how parties to approach directly are chosen, written so that
-  someone else would select the same set.
-- Treatment of inaccessible sources and of nonresponses, decided in advance rather than when they occur.
-- **The minimum coverage required to support a NEGATIVE finding**, stated as a specific condition rather
-  than as a judgment to be made later.
-
-Additions or changes after freeze require a VERSIONED AMENDMENT with an explanation of why the original
-manifest was inadequate. Amending is permitted. Amending silently is not.
-
-**Window.** 24 months, plus older items still ACTIVELY PURSUED, which requires an observable: commits in
-the last 12 months, current funding, a live proposal, or a named party confirming continued work.
-
-**Deduplication.** One entry per distinct need. Request count records intensity, independent party count
-records breadth.
-
-**INSUFFICIENT COVERAGE CANNOT PRODUCE A NEGATIVE FINDING.**
-
-## Corpus composition
+## Corpus rules
 
 Sourced applications included regardless of which package they favour. Characterized, not classified.
-Hypotheticals go to a stress-test appendix, never the demand corpus. No minimum count.
+Hypotheticals go to a stress-test appendix. No minimum count. Discovery follows the frozen manifest.
+INSUFFICIENT COVERAGE CANNOT PRODUCE A NEGATIVE FINDING.
 
-## Evidence dimensions, anchored
+### Evidence dimensions
 
 | Dimension | Values |
 | --- | --- |
-| **Dash demand provenance** | NAMED PARTY BUILDING, code or funding exists. NAMED PARTY REQUESTING, traceable to a message or proposal. COMMUNITY DISCUSSION, raised publicly with nobody committing. INFERRED. NONE |
-| **Implementation maturity** | DEPLOYED ELSEWHERE. BUILDING ELSEWHERE. SPECIFIED. CONCEPT ONLY |
-| **Source independence** | INDEPENDENT, no relationship to this project or its author. ADJACENT, a Dash contributor or a party this project has worked with, disclosed rather than disqualifying. SOLICITED, this project asked |
-| **Confidence** | HIGH, primary source read directly, unambiguous. MEDIUM, primary source read but partly ambiguous, or reliable secondary. LOW, secondary, inferred, or possibly stale. The specific uncertainty is always stated |
+| **Dash demand provenance** | NAMED PARTY BUILDING; NAMED PARTY REQUESTING; COMMUNITY DISCUSSION; INFERRED; NONE |
+| **Implementation maturity** | DEPLOYED ELSEWHERE; BUILDING ELSEWHERE; SPECIFIED; CONCEPT ONLY |
+| **Source independence** | INDEPENDENT; ADJACENT, disclosed not disqualifying; SOLICITED |
+| **Confidence** | HIGH, primary and unambiguous; MEDIUM, primary but partly ambiguous or reliable secondary; LOW, secondary, inferred or possibly stale. The specific uncertainty is always stated |
 
-## Recorded per entry, architecture-free
+### Recorded per entry, architecture-free
 
 Workload shape and frequency. Fan-out. Long-lived obligations. Asynchronous operations and whether they
-span blocks. Native state accessed. Authority required. How often genuinely NEW behavior is needed, as
-distinct from new instances. Whether instances differ only by configuration. Who must create, invoke,
-modify or stop an instance. How quickly behavior must change.
+span blocks. Native state accessed. Authority required. How often genuinely NEW behavior is needed.
+Whether instances differ only by configuration. Who must create, invoke, modify or stop an instance.
+How quickly behavior must change.
 
-Whether these imply a protocol release is decided after freeze two, not here.
+## Criteria
 
-## Criteria, atomic and anchored
-
-Nine criteria. Each scored 0 to 4, or UNKNOWN.
+Nine criteria, each 0 to 4 or UNKNOWN. **Every criterion is scored against the WHOLE PACKAGE**, meaning
+capability and admission together.
 
 **C1. Coverage of sourced Dash needs uniquely served. Weight 25.**
-Scores SOURCED needs, never abstract expressiveness, since expressiveness hands A4 the result
-automatically. 0, serves no sourced need. 1, serves needs a lower-capability package also serves. 2,
-uniquely serves a need whose provenance is INFERRED or COMMUNITY only. 3, uniquely serves a need with a
-NAMED REQUESTING party. 4, uniquely serves several, at least one with a NAMED BUILDING party.
+CORRECTED from version 4 to operate on packages. A need is served only if BOTH the capability and the
+admission choices satisfy it. A need requiring permissionless deployment is NOT served by a
+governance-gated package whose capability would otherwise suffice.
+0, serves no sourced need. 1, serves only needs a lower-capability package also serves. 2, uniquely
+serves a need of INFERRED or COMMUNITY provenance. 3, uniquely serves a need with a NAMED REQUESTING
+party. 4, uniquely serves several, one with a NAMED BUILDING party.
 
 **C2. Trust removed or introduced. Weight 20.**
-0, introduces a new mandatory trusted party, which is also a veto. 1, introduces a discretionary trusted
-role. 2, neutral. 3, removes a discretionary trust dependency. 4, removes one users must currently
-accept.
+0, introduces a new mandatory trusted party, also a veto. 1, introduces a discretionary trusted role.
+2, neutral. 3, removes a discretionary dependency. 4, removes one users must currently accept.
 
 **C3. Security surface and auditability. Weight 20.**
-0, unbounded new attack surface, no audit path. 1, large surface, specialist audit only. 2, moderate
-surface, established audit practice. 3, small surface, mostly existing reviewed code. 4, no new
-consensus-critical surface.
+0, unbounded new surface, no audit path. 1, large, specialist audit only. 2, moderate, established
+practice. 3, small, mostly existing reviewed code. 4, no new consensus-critical surface.
 
-**C4a. Governance burden. Weight 5.**
-0, governance must act on every change. 1, frequently. 2, periodically. 3, rarely. 4, never beyond today.
+**C4a. Governance burden. Weight 5.** 0, governance acts on every change. 1, frequently. 2,
+periodically. 3, rarely. 4, never beyond today.
 
-**C4b. Upgrade and maintenance burden. Weight 5.**
-0, a standing upgrade duty with no tooling and a fork risk on skew. 1, regular upgrades needing
-coordination. 2, periodic upgrades, tooled. 3, rare upgrades. 4, none beyond today.
+**C4b. Upgrade and maintenance burden. Weight 5.** 0, standing duty, no tooling, fork risk on skew. 1,
+regular coordinated upgrades. 2, periodic and tooled. 3, rare. 4, none beyond today.
 
-**C4c. Operating burden. Weight 5.**
-0, new always-on operational responsibility for node operators. 1, significant new duties. 2, modest.
-3, negligible. 4, none.
+**C4c. Operating burden. Weight 5.** 0, new always-on responsibility for node operators. 1, significant.
+2, modest. 3, negligible. 4, none.
 
-Split from version 3's single C4, since governance, upgrade and operating burden can point in different
-directions and one score hid that.
+**C5. Developer autonomy and composability. Weight 10.** 0, every capability needs a protocol release.
+1, governance approval per capability. 2, approval once per class. 3, independent within bounds. 4,
+independent and composing freely.
 
-**C5. Developer autonomy and composability. Weight 10.**
-0, every new capability needs a protocol release. 1, governance approval per capability. 2, governance
-approval once per class. 3, builders proceed independently within bounds. 4, independently and compose
-freely.
-
-**C6. Reversibility. Weight 5.**
-0, effectively irreversible once live. 1, reversible at high cost with user impact. 2, reversible with a
+**C6. Reversibility. Weight 5.** 0, effectively irreversible. 1, high cost with user impact. 2, needs a
 migration. 3, reversible by disabling, state retained. 4, trivially reversible.
 
 **C7. Time to first useful capability. Weight 5.**
-Completed from version 3, which defined only 0, 2 and 4. 0, longest by a wide margin. 1, longer than
-median. 2, mid-range. 3, shorter than median. 4, shortest. Scored relatively.
-
-**C7 CONSTRAINT.** Time is compared only among packages that actually serve the sourced need under
-consideration. A package that serves no sourced need cannot win on speed, because doing nothing is
-always fastest and that is not a result.
+CORRECTED from version 4 to define its comparison set. C7 is scored PER SOURCED NEED, among the packages
+that serve that need, meaning those scoring 2 or above on C1 for it. A package's C7 is the mean of its
+per-need scores across the needs it serves, rounded to the nearest integer.
+0, longest by a wide margin. 1, longer than median. 2, mid-range. 3, shorter than median. 4, shortest.
+**A package serving no sourced need scores C7 as NOT APPLICABLE, never 4.** Doing nothing is always
+fastest and that is not a result.
 
 ## Weights, AWAITING OWNER APPROVAL
 
@@ -207,48 +211,69 @@ always fastest and that is not a result.
 
 Total 100. Vetoes sit outside and cannot be traded against these.
 
-## Sensitivity scenarios, frozen now
+## The score formula
 
-CORRECTED from version 3, whose "plausible weight range" left discretion after scoring. The scenarios
-are fixed here. A leading package must lead in ALL of them.
+CORRECTED from version 4, which left the arithmetic unstated.
 
-| Scenario | Change from baseline |
-| --- | --- |
-| **S1 Baseline** | The approved table |
-| **S2 Security-first** | C3 to 30, C1 to 15 |
-| **S3 Demand-first** | C1 to 35, C2 to 15, C3 to 15 |
-| **S4 Operations-first** | C4a, C4b, C4c to 10 each, C1 to 15, C5 to 5 |
-| **S5 Autonomy-first** | C5 to 20, C4a, C4b, C4c to 2, C6 to 4, C7 to 4 |
+**Normalized package score** = ( sum over criteria of weight times score ) divided by 4, giving a 0 to
+100 scale, since the maximum is 4 times 100 weight.
 
-Each scenario totals 100. Adding a scenario after scoring requires a versioned amendment.
+**NOT APPLICABLE criteria** are removed from the package's score and its weights renormalized to 100
+across the remaining criteria, so a package is neither rewarded nor punished for a criterion it cannot
+encounter. The renormalization is shown in the scoring sheet.
+
+**Ties.** Two packages within 2.0 normalized points are TIED in that scenario.
+
+**LEADS means UNIQUE first place**, more than 2.0 points above every other package. A package that is
+tied for first does not lead.
+
+## Sensitivity scenarios, frozen
+
+| Scenario | Changes from baseline | Total |
+| --- | --- | ---: |
+| **S1 Baseline** | none | 100 |
+| **S2 Security-first** | C3 to 30, C1 to 15 | 100 |
+| **S3 Demand-first** | C1 to 35, C2 to 15, C3 to 15 | 100 |
+| **S4 Operations-first** | C4a, C4b, C4c to 10 each, C1 to 15, C5 to 5 | 100 |
+| **S5 Autonomy-first** | C5 to 20, C4a, C4b, C4c to 2 each, C7 to 4 | 100 |
+
+CORRECTED from version 4, where S5 totalled 99. C6 stays at 5 and C7 drops to 4, which restores 100.
+Every scenario total is checked arithmetically before freeze.
+
+## The unknown-interval test
+
+CORRECTED from version 4, whose "material unknown capable of reversing the ranking" was a judgment.
+
+Each UNKNOWN is assigned its full interval, 0 through 4. Because the score is linear in each criterion,
+it suffices to evaluate the CORNERS, meaning every combination of 0 and 4 across the unknown criteria.
+If ANY corner, in ANY scenario, changes which package leads, the result is INCONCLUSIVE.
+
+This replaces the earlier rule of thumb about criteria weighted 15 or above. That threshold is now
+redundant, since a heavily weighted unknown will fail the corner test on its own.
 
 ## From scores to a finding
 
-1. Eliminate any package failing an APPLICABLE veto. An unknown on an applicable veto is blocking.
-2. No capability credit for hypothetical uses. C1 counts sourced needs only.
+1. Eliminate packages failing an APPLICABLE veto. An unknown on an applicable veto is blocking.
+2. No capability credit for hypothetical uses.
 3. A more capable package may be recommended only if it uniquely serves at least one sourced,
    non-INFERRED need.
-4. An UNKNOWN on any criterion weighted 15 or above, meaning C1, C2 or C3, blocks PURSUE for that
-   package.
-5. PURSUE requires the package to rank first in ALL five scenarios.
-6. If the leading package changes across scenarios, report an UNRESOLVED SET.
+4. PURSUE requires unique first place in ALL five scenarios AND survival of the corner test.
+5. Otherwise report an UNRESOLVED SET naming the packages that cannot be separated.
 
-## The four outcomes, each defined
+## The four outcomes
 
-**PURSUE.** Coverage adequate per the manifest. No unresolved applicable veto. One package leads in all
-five scenarios. That package uniquely serves at least one sourced, non-inferred need. No UNKNOWN on C1,
-C2 or C3.
+**PURSUE.** Coverage adequate per the manifest. No unresolved applicable veto. One package leads
+uniquely in all five scenarios and survives the corner test. It uniquely serves at least one sourced,
+non-inferred need.
 
-**DEFER.** Coverage adequate, and either demand is real but thin, or the leading package is blocked only
-by unknowns that further work could resolve. Defer names what would resolve it and a date to revisit.
+**DEFER.** Coverage adequate, and either demand is real but thin, or the leader is blocked only by
+unknowns further work could resolve. Names what would resolve it and a revisit date.
 
-**DO NOT PURSUE ON CURRENT EVIDENCE.** REQUIRES ADEQUATE COVERAGE. No sourced, non-inferred need
-requires capability beyond the lowest-capability package that satisfies its vetoes. This is a statement
-about current evidence, not about the idea, and it carries a reversal condition by construction.
+**DO NOT PURSUE ON CURRENT EVIDENCE.** REQUIRES ADEQUATE COVERAGE. No sourced non-inferred need requires
+capability beyond the lowest-capability package satisfying its vetoes.
 
-**INCONCLUSIVE.** Any of: coverage below the manifest minimum; an unresolved applicable veto; the
-leading package changes across scenarios; or a material unknown capable of reversing the ranking. A thin
-search always lands here rather than in DO NOT PURSUE.
+**INCONCLUSIVE.** Coverage below the manifest minimum, or an unresolved applicable veto, or no unique
+leader across scenarios, or a corner-test failure. A thin search always lands here.
 
 ## Reversal conditions
 
@@ -256,22 +281,19 @@ search always lands here rather than in DO NOT PURSUE.
 - Absence of programmability becomes a stated cause of loss, traceable to named parties.
 - The chosen package is attempted and costs more than an alternative.
 - A PURSUE reverses if its corpus proves to rest mainly on SOLICITED or LOW-confidence entries.
-- A DO NOT PURSUE reverses on new sourced demand, and is revisited on a recorded date.
+- A DO NOT PURSUE reverses on new sourced demand, revisited on a recorded date.
 
 ## How results inform the rest of the project
 
 A qualitative corpus INFORMS these and does not measure them. Every derived estimate carries source,
-range and confidence. H1 gains sourced candidate shapes and stays a hypothesis. H2 gains per-application
-fan-out as ranges. P3 gains rights models. P10 gains the authority column.
+range and confidence. H1 gains sourced shapes and stays a hypothesis. H2 gains fan-out as ranges. P3
+gains rights models. P10 gains the authority column.
 
-## Sequence, with two freezes
+## Sequence
 
-1. Owner approves this method, the weights, the discovery manifest and the sensitivity scenarios.
-2. **FREEZE ONE**, all four committed at a named version.
-3. Corpus assembled and characterized, architecture-free, following the frozen manifest.
-4. Coverage, independence, duplicates and exclusions reviewed against the manifest minimum.
+1. Owner approves this method, the weights, the manifest and the scenarios.
+2. **FREEZE ONE**, all four committed at a named version, with the package set.
+3. Corpus assembled per the frozen manifest, architecture-free.
+4. Coverage reviewed against the manifest minimum.
 5. **FREEZE TWO**, corpus committed.
 6. Only then are packages scored.
-
-The discovery manifest itself is written as part of step 1 and is not yet drafted. It is the one
-remaining artifact before approval.
